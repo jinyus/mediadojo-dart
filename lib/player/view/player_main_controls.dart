@@ -3,6 +3,7 @@ import 'package:flutter_it/flutter_it.dart';
 import 'package:media_kit/media_kit.dart';
 
 import '../../common/view/ui_constants.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 
 class PlayerMainControls extends StatelessWidget {
@@ -25,13 +26,13 @@ class PlayerMainControls extends StatelessWidget {
         IconButton(
           style: playerButtonStyle,
           icon: Icon(Icons.skip_previous, color: iconColor),
-          onPressed: di<PlayerManager>().skipToPrevious,
+          onPressed: playerManagerRef().skipToPrevious,
         ),
         PlayerIsPlayingButton(iconColor: iconColor),
         IconButton(
           style: playerButtonStyle,
           icon: Icon(Icons.skip_next, color: iconColor),
-          onPressed: di<PlayerManager>().skipToNext,
+          onPressed: playerManagerRef().skipToNext,
         ),
         PlayerPlaylistModeButton(
           iconColor: iconColor,
@@ -58,7 +59,7 @@ class PlayerShuffleButton extends StatelessWidget with WatchItMixin {
     return IconButton(
       style: playerButtonStyle,
       icon: Icon(Icons.shuffle, color: shuffle ? selectedColor : iconColor),
-      onPressed: () => di<PlayerManager>().toggleShuffle(),
+      onPressed: () => playerManagerRef().toggleShuffle(),
     );
   }
 }
@@ -77,7 +78,7 @@ class PlayerPlaylistModeButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final playlistMode = watchStream(
       (PlayerManager p) => p.playlistModeStream,
-      initialValue: di<PlayerManager>().playlistMode,
+      initialValue: playerManagerRef().playlistMode,
       preserveState: true,
     ).data;
 
@@ -93,7 +94,7 @@ class PlayerPlaylistModeButton extends StatelessWidget with WatchItMixin {
           _ => iconColor,
         },
       ),
-      onPressed: () => di<PlayerManager>().changePlaylistMode(),
+      onPressed: () => playerManagerRef().changePlaylistMode(),
     );
   }
 }
@@ -107,7 +108,7 @@ class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final isPlaying = watchStream(
       (PlayerManager p) => p.isPlayingStream,
-      initialValue: di<PlayerManager>().isPlaying,
+      initialValue: playerManagerRef().isPlaying,
       preserveState: true,
     ).data;
 
@@ -117,7 +118,7 @@ class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
         isPlaying == true ? Icons.pause : Icons.play_arrow,
         color: iconColor,
       ),
-      onPressed: di<PlayerManager>().playOrPause,
+      onPressed: playerManagerRef().playOrPause,
     );
   }
 }

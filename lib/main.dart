@@ -8,6 +8,6 @@ import 'register_dependencies.dart';
 Future<void> main() async {
   await YaruWindowTitleBar.ensureInitialized();
   await SystemTheme.accentColor.load();
-  registerDependencies();
+  await startUp();
   runApp(const MediaDojo());
 }

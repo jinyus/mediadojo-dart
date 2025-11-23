@@ -9,6 +9,7 @@ import '../../extensions/duration_x.dart';
 import '../../extensions/string_x.dart';
 import '../../player/data/episode_media.dart';
 import '../../player/player_manager.dart';
+import '../../register_dependencies.dart';
 import '../data/podcast_metadata.dart';
 import '../podcast_manager.dart';
 import 'download_button.dart';
@@ -31,7 +32,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
 
     final currentMedia = watchStream(
       (PlayerManager m) => m.currentMediaStream,
-      initialValue: di<PlayerManager>().currentMedia,
+      initialValue: playerManagerRef().currentMedia,
     ).data;
 
     final selected = currentMedia?.id == episode.id;
@@ -39,17 +40,17 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
     final isPlaying =
         watchStream(
           (PlayerManager p) => p.isPlayingStream,
-          initialValue: di<PlayerManager>().isPlaying,
+          initialValue: playerManagerRef().isPlaying,
           preserveState: false,
         ).data ??
         false;
 
     void onPressed() {
       if (isPlaying && selected) {
-        di<PlayerManager>().pause();
+        playerManagerRef().pause();
       } else {
         if (selected) {
-          di<PlayerManager>().playOrPause();
+          playerManagerRef().playOrPause();
         } else {
           setPlaylist();
         }
@@ -86,7 +87,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
               ),
               DownloadButton(
                 audio: episode,
-                addPodcast: () => di<PodcastManager>().addPodcast(
+                addPodcast: () => podcastManagerRef().addPodcast(
                   PodcastMetadata(
                     feedUrl: episode.feedUrl,
                     imageUrl: podcastImage,

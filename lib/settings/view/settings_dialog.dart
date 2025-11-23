@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/app_config.dart';
 import '../../common/view/confirm.dart';
 import '../../extensions/build_context_x.dart';
+import '../../register_dependencies.dart';
 import '../settings_manager.dart';
 
 class SettingsDialog extends StatelessWidget with WatchItMixin {
@@ -15,7 +16,7 @@ class SettingsDialog extends StatelessWidget with WatchItMixin {
     children: [
       ListTile(
         trailing: ElevatedButton(
-          onPressed: di<SettingsManager>().downloadsDirCommand.run,
+          onPressed: settingsManagerRef().downloadsDirCommand.run,
           child: Text(context.l10n.open),
         ),
         title: Text(context.l10n.downloadsDirectory),
@@ -49,7 +50,7 @@ class SettingsDialog extends StatelessWidget with WatchItMixin {
           onPressed: () => ConfirmationDialog.show(
             context: context,
             title: Text(context.l10n.resetAllSettingsConfirm),
-            onConfirm: di<SharedPreferences>().clear,
+            onConfirm: sharedPrefRef().clear,
           ),
           child: Text(context.l10n.resetAllSettings),
         ),

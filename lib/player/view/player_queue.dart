@@ -5,6 +5,7 @@ import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/string_x.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 
 class PlayerQueue extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -27,13 +28,13 @@ class _PlayerQueueState extends State<PlayerQueue> {
   Widget build(BuildContext context) {
     final medias = watchStream(
       (PlayerManager p) => p.mediasStream,
-      initialValue: di<PlayerManager>().medias,
+      initialValue: playerManagerRef().medias,
       preserveState: true,
     ).data;
 
     final playlistIndex = watchStream(
       (PlayerManager p) => p.playlistIndexStream,
-      initialValue: di<PlayerManager>().playlistIndex,
+      initialValue: playerManagerRef().playlistIndex,
       preserveState: true,
     ).data;
 
@@ -68,7 +69,7 @@ class _PlayerQueueState extends State<PlayerQueue> {
                         if (newIndex > oldIndex) {
                           newIndex -= 1;
                         }
-                        di<PlayerManager>().move(oldIndex, newIndex);
+                        playerManagerRef().move(oldIndex, newIndex);
                       },
                       scrollController: _scrollController,
                       itemCount: medias.length,
@@ -78,7 +79,7 @@ class _PlayerQueueState extends State<PlayerQueue> {
                           key: ValueKey(media.uri + index.toString()),
                           padding: const EdgeInsets.only(bottom: kSmallPadding),
                           child: ListTile(
-                            onTap: () => di<PlayerManager>().jump(index),
+                            onTap: () => playerManagerRef().jump(index),
                             leading: Text('${index + 1}'),
                             title: Text(
                               media.title?.unEscapeHtml ?? 'Unknown',
@@ -99,7 +100,7 @@ class _PlayerQueueState extends State<PlayerQueue> {
                                           horizontal: kSmallPadding,
                                         ),
                                         child: IconButton(
-                                          onPressed: () => di<PlayerManager>()
+                                          onPressed: () => playerManagerRef()
                                               .removeFromPlaylist(index),
                                           icon: Icon(
                                             Icons.delete,

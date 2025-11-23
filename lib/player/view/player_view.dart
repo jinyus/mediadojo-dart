@@ -6,6 +6,7 @@ import '../../extensions/color_x.dart';
 import 'package:flutter_it/flutter_it.dart';
 
 import '../../common/view/ui_constants.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 import 'player_bottom_album_art.dart';
 import 'player_control_mixin.dart';
@@ -21,7 +22,7 @@ class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
   Widget build(BuildContext context) {
     final media = watchStream(
       (PlayerManager p) => p.currentMediaStream,
-      initialValue: di<PlayerManager>().currentMedia,
+      initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
 
@@ -97,9 +98,9 @@ class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
                       style: playerButtonStyle,
                       icon: Icon(Icons.stop, color: iconColor),
                       onPressed: () {
-                        di<PlayerManager>().setPlaylist([], play: false);
-                        di<PlayerManager>().stop();
-                        di<PlayerManager>().updateState(fullMode: false);
+                        playerManagerRef().setPlaylist([], play: false);
+                        playerManagerRef().stop();
+                        playerManagerRef().updateState(fullMode: false);
                         Navigator.of(context).maybePop();
                       },
                     ),

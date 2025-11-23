@@ -98,6 +98,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
+  basic_interfaces:
+    dependency: transitive
+    description:
+      name: basic_interfaces
+      sha256: c37c8c4ddbc594430eb3817a4edfcc9a0cadbc7ea4c51a5b48785e351f1ba479
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   basic_utils:
     dependency: "direct main"
     description:
@@ -590,6 +598,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.3"
+  lite_ref:
+    dependency: transitive
+    description:
+      name: lite_ref
+      sha256: "2519ee5c20257ed8b8eec92c967b8ae2a3361895e9e5dd268569c681803df41b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.1"
+  lite_ref_core:
+    dependency: transitive
+    description:
+      name: lite_ref_core
+      sha256: b902af6b90736d6fb7a2c171af37d15f4894a5880e9eb55ffb3fee5f01385849
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   local_notifier:
     dependency: "direct main"
     description:
@@ -1143,6 +1167,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.12.1"
+  state_beacon:
+    dependency: "direct main"
+    description:
+      name: state_beacon
+      sha256: "3488b7c0f39f877a540fef5236285a8d19138c69b9015bf0fd5054c44d16a613"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  state_beacon_core:
+    dependency: transitive
+    description:
+      name: state_beacon_core
+      sha256: "900a56a65255f5d1763d4d445be9b0189e58de98de3cd57d68e71d6b239ebe72"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  state_beacon_flutter:
+    dependency: transitive
+    description:
+      name: state_beacon_flutter
+      sha256: fba1eff00596886fa15c69f9385eda80ea10b551be0cd37be28ee66eadbfacc3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   stream_channel:
     dependency: transitive
     description:

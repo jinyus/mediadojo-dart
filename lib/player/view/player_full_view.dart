@@ -6,6 +6,7 @@ import 'package:yaru/yaru.dart';
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 import 'player_album_art.dart';
 import 'player_control_mixin.dart';
@@ -19,29 +20,30 @@ class PlayerFullView extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    final showPlayerExplorer = watchValue(
-      (PlayerManager m) =>
-          m.playerViewState.select((e) => e.showPlayerExplorer),
-    );
+    final showPlayerExplorer = watch(
+      playerManagerRef().playerViewState.select((e) => e.showPlayerExplorer),
+    ).value;
 
     final isVideo =
         watchStream(
-          (PlayerManager p) => p.isVideoStream,
-          initialValue: di<PlayerManager>().isVideo,
+          null,
+          target: playerManagerRef().isVideoStream,
+          initialValue: playerManagerRef().isVideo,
           preserveState: false,
         ).data ??
         false;
 
     final media = watchStream(
-      (PlayerManager p) => p.currentMediaStream,
-      initialValue: di<PlayerManager>().currentMedia,
+      null,
+      target: playerManagerRef().currentMediaStream,
+      initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
 
     final color =
-        watchValue(
-          (PlayerManager p) => p.playerViewState.select((e) => e.color),
-        ) ??
+        watch(
+          playerManagerRef().playerViewState.select((e) => e.color),
+        ).value ??
         context.colorScheme.primary;
 
     final isPortrait = !context.showSideBar;
@@ -105,7 +107,7 @@ class PlayerFullView extends StatelessWidget
                       : Icons.view_sidebar_outlined,
                   color: iconColor,
                 ),
-                onPressed: () => di<PlayerManager>().updateState(
+                onPressed: () => playerManagerRef().updateState(
                   showPlayerExplorer: !showPlayerExplorer,
                 ),
               ),
@@ -119,7 +121,7 @@ class PlayerFullView extends StatelessWidget
               if (isVideo)
                 Expanded(
                   flex: 2,
-                  child: Video(controller: di<PlayerManager>().videoController),
+                  child: Video(controller: playerManagerRef().videoController),
                 )
               else
                 Expanded(

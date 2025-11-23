@@ -3,6 +3,7 @@ import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 
 import '../../player/player_manager.dart';
+import '../../register_dependencies.dart';
 import '../podcast_manager.dart';
 import 'episode_tile.dart';
 
@@ -14,7 +15,7 @@ class PodcastPageEpisodeList extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     callOnce(
-      (context) => di<PodcastManager>().fetchEpisodeMediaCommand(podcastItem),
+      (context) => podcastManagerRef().fetchEpisodeMediaCommand(podcastItem),
     );
 
     return watchValue(
@@ -26,7 +27,7 @@ class PodcastPageEpisodeList extends StatelessWidget with WatchItMixin {
           episode: episodes.elementAt(index),
           podcastImage: podcastItem.bestArtworkUrl,
           setPlaylist: () =>
-              di<PlayerManager>().setPlaylist(episodes, index: index),
+              playerManagerRef().setPlaylist(episodes, index: index),
         ),
       ),
       onError: (error, lastResult, param) => SliverFillRemaining(

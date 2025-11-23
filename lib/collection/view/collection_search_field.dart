@@ -5,6 +5,7 @@ import '../../common/media_type.dart';
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
+import '../../register_dependencies.dart';
 import '../collection_manager.dart';
 
 class CollectionSearchField extends StatefulWidget
@@ -21,7 +22,7 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
   @override
   void initState() {
     super.initState();
-    _controller.text = di<CollectionManager>().textChangedCommand.value;
+    _controller.text = collectionManagerRef().textChangedCommand.value;
   }
 
   @override
@@ -32,14 +33,14 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final searchType = watchValue((CollectionManager s) => s.mediaTypeNotifier);
+    final searchType = watch(collectionManagerRef().mediaTypeNotifier).value;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: kBigPadding,
       ).copyWith(top: kBigPadding, bottom: kSmallPadding),
       child: TextField(
         controller: _controller,
-        onChanged: di<CollectionManager>().textChangedCommand.run,
+        onChanged: collectionManagerRef().textChangedCommand.run,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: context.colorScheme.primary),
@@ -57,7 +58,7 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
                     icon: Icon(e.iconData()),
                     tooltip: e.localize(context),
                     onPressed: () {
-                      di<CollectionManager>().mediaTypeNotifier.value = e;
+                      collectionManagerRef().mediaTypeNotifier.value = e;
                     },
                   ),
                 )
@@ -68,7 +69,7 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               _controller.clear();
-              di<CollectionManager>().textChangedCommand.run('');
+              collectionManagerRef().textChangedCommand.run('');
             },
           ),
         ),

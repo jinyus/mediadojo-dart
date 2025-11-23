@@ -9,6 +9,7 @@ import '../player/player_manager.dart';
 import '../player/view/player_full_view.dart';
 import '../player/view/player_view.dart';
 import '../podcasts/download_manager.dart';
+import '../register_dependencies.dart';
 import '../search/view/search_view.dart';
 import '../settings/view/settings_dialog.dart';
 
@@ -18,13 +19,13 @@ class Home extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     registerStreamHandler(
-      select: (DownloadManager m) => m.messageStream,
+      target: downloadManagerRef().messageStream,
       handler: downloadMessageStreamHandler,
     );
 
-    final playerFullWindowMode = watchValue(
-      (PlayerManager m) => m.playerViewState.select((e) => e.fullMode),
-    );
+    final playerFullWindowMode = watch(
+      playerManagerRef().playerViewState.select((e) => e.fullMode),
+    ).value;
 
     if (playerFullWindowMode) return const PlayerFullView();
 

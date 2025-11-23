@@ -2,6 +2,7 @@ import 'package:flutter_it/flutter_it.dart';
 
 import '../collection/collection_manager.dart';
 import '../player/data/station_media.dart';
+import '../register_dependencies.dart';
 import '../search/search_manager.dart';
 import 'radio_library_service.dart';
 import 'radio_service.dart';
@@ -52,7 +53,7 @@ class RadioManager {
     if (name == null || name.isEmpty) {
       return [];
     }
-    final result = await di<RadioService>().search(
+    final result = await radioServiceRef().search(
       country: country,
       name: name,
       state: state,

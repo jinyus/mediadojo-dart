@@ -9,6 +9,7 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/string_x.dart';
 import '../../player/player_manager.dart';
+import '../../register_dependencies.dart';
 import '../podcast_library_service.dart';
 import '../podcast_service.dart';
 import 'podcast_favorite_button.dart';
@@ -99,14 +100,14 @@ class _PodcastCardState extends State<PodcastCard> {
                                 onPressed: () async {
                                   final res = await showFutureLoadingDialog(
                                     context: context,
-                                    future: () async => di<PodcastService>()
+                                    future: () async => podcastServiceRef()
                                         .findEpisodes(item: widget.podcastItem),
                                   );
                                   if (res.isValue) {
                                     final episodes = res.asValue!.value;
                                     final withDownloads = episodes.map((e) {
                                       final download =
-                                          di<PodcastLibraryService>()
+                                          podcastLibraryServiceRef()
                                               .getDownload(e.id);
                                       if (download != null) {
                                         return e.copyWithX(resource: download);
@@ -114,7 +115,7 @@ class _PodcastCardState extends State<PodcastCard> {
                                       return e;
                                     }).toList();
                                     if (withDownloads.isNotEmpty) {
-                                      await di<PlayerManager>().setPlaylist(
+                                      await playerManagerRef().setPlaylist(
                                         withDownloads,
                                         index: 0,
                                       );

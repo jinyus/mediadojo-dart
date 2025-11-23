@@ -4,6 +4,7 @@ import 'package:flutter_it/flutter_it.dart';
 import '../../common/media_type.dart';
 import '../../podcasts/view/podcast_collection_view.dart';
 import '../../radio/view/radio_favorites_list.dart';
+import '../../register_dependencies.dart';
 import '../collection_manager.dart';
 import 'collection_search_field.dart';
 
@@ -15,9 +16,7 @@ class CollectionView extends StatelessWidget with WatchItMixin {
     children: [
       const CollectionSearchField(),
       Expanded(
-        child: switch (watchValue(
-          (CollectionManager s) => s.mediaTypeNotifier,
-        )) {
+        child: switch (watch(collectionManagerRef().mediaTypeNotifier).value) {
           MediaType.podcast => const PodcastCollectionView(),
           MediaType.radioStation => const RadioFavoritesList(),
         },

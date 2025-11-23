@@ -5,6 +5,7 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/station_media.dart';
 import '../../player/player_manager.dart';
+import '../../register_dependencies.dart';
 import '../radio_manager.dart';
 import 'radio_browser_station_star_button.dart';
 import 'radio_host_not_connected_content.dart';
@@ -20,7 +21,7 @@ class RadioBrowser extends StatelessWidget with WatchItMixin {
             const Center(child: CircularProgressIndicator.adaptive()),
         onError: (error, param, lastResult) => RadioHostNotConnectedContent(
           message: 'Error: $error',
-          onRetry: di<RadioManager>().updateSearchCommand.run,
+          onRetry: radioManagerRef().updateSearchCommand.run,
         ),
         onData: (data, param) => ListView.builder(
           itemCount: data.length,
@@ -46,7 +47,7 @@ class RadioBrowserTile extends StatelessWidget with WatchItMixin {
         watchStream(
           (PlayerManager p) =>
               p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
-          initialValue: di<PlayerManager>().currentMedia?.id == media.id,
+          initialValue: playerManagerRef().currentMedia?.id == media.id,
           preserveState: false,
           allowStreamChange: true,
         ).data ??
@@ -54,7 +55,7 @@ class RadioBrowserTile extends StatelessWidget with WatchItMixin {
     minLeadingWidth: kDefaultTileLeadingDimension,
     leading: RemoteMediaListTileImage(media: media),
     subtitle: Text(media.genres.take(5).toList().join(', ')),
-    onTap: () => di<PlayerManager>().setPlaylist([media]),
+    onTap: () => playerManagerRef().setPlaylist([media]),
     trailing: RadioBrowserStationStarButton(media: media),
   );
 }

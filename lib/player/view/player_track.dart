@@ -5,6 +5,7 @@ import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/color_x.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 
 class PlayerTrack extends StatelessWidget with WatchItMixin {
@@ -36,7 +37,7 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
     final isPlaying =
         watchStream(
           (PlayerManager p) => p.isPlayingStream,
-          initialValue: di<PlayerManager>().isPlaying,
+          initialValue: playerManagerRef().isPlaying,
         ).data ??
         false;
 
@@ -69,7 +70,7 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
                     ? buffer.inSeconds.toDouble()
                     : null,
                 onChanged: (value) {
-                  di<PlayerManager>().seek(Duration(seconds: value.toInt()));
+                  playerManagerRef().seek(Duration(seconds: value.toInt()));
                 },
               ),
             ),

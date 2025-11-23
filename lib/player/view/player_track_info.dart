@@ -5,6 +5,7 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/duration_x.dart';
 import '../../radio/view/radio_browser_station_star_button.dart';
+import '../../register_dependencies.dart';
 import '../../search/copy_to_clipboard_content.dart';
 import '../data/station_media.dart';
 import '../player_manager.dart';
@@ -29,7 +30,7 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final media = watchStream(
       (PlayerManager p) => p.currentMediaStream,
-      initialValue: di<PlayerManager>().currentMedia,
+      initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 
+import '../../register_dependencies.dart';
 import '../data/podcast_metadata.dart';
 import '../podcast_manager.dart';
 
@@ -23,8 +24,8 @@ class PodcastFavoriteButton extends StatelessWidget with WatchItMixin {
     );
 
     void onPressed() => isSubscribed
-        ? di<PodcastManager>().removePodcast(feedUrl: podcastItem.feedUrl!)
-        : di<PodcastManager>().addPodcast(
+        ? podcastManagerRef().removePodcast(feedUrl: podcastItem.feedUrl!)
+        : podcastManagerRef().addPodcast(
             PodcastMetadata(
               feedUrl: podcastItem.feedUrl!,
               name: podcastItem.collectionName!,

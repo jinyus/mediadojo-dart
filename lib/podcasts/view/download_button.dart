@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/episode_media.dart';
+import '../../register_dependencies.dart';
 import '../../settings/settings_manager.dart';
 import '../download_manager.dart';
 import '../podcast_library_service.dart';
@@ -21,7 +22,7 @@ class DownloadButton extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final manager = di<DownloadManager>();
+    final manager = downloadManagerRef();
     final value = watchPropertyValue(
       (DownloadManager m) => m.getValue(audio?.url),
     );
@@ -32,7 +33,7 @@ class DownloadButton extends StatelessWidget with WatchItMixin {
               .map((_) => m.getDownload(audio?.url) != null)
               .distinct(),
           initialValue:
-              di<PodcastLibraryService>().getDownload(audio?.url) != null,
+              podcastLibraryServiceRef().getDownload(audio?.url) != null,
           preserveState: false,
         ).data ??
         false;

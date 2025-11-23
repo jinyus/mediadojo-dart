@@ -5,6 +5,7 @@ import '../../common/media_type.dart';
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
+import '../../register_dependencies.dart';
 import '../search_manager.dart';
 
 class SearchField extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -20,7 +21,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   void initState() {
     super.initState();
-    _controller.text = di<SearchManager>().textChangedCommand.value;
+    _controller.text = searchManagerRef().textChangedCommand.value;
   }
 
   @override
@@ -38,7 +39,7 @@ class _SearchFieldState extends State<SearchField> {
       ).copyWith(top: kBigPadding, bottom: kSmallPadding),
       child: TextField(
         controller: _controller,
-        onChanged: di<SearchManager>().textChangedCommand.run,
+        onChanged: searchManagerRef().textChangedCommand.run,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: context.colorScheme.primary),
@@ -56,7 +57,7 @@ class _SearchFieldState extends State<SearchField> {
                     icon: Icon(e.iconData()),
                     tooltip: e.localize(context),
                     onPressed: () {
-                      di<SearchManager>().searchTypeNotifier.value = e;
+                      searchManagerRef().searchTypeNotifier.value = e;
                     },
                   ),
                 )
@@ -67,7 +68,7 @@ class _SearchFieldState extends State<SearchField> {
             icon: const Icon(Icons.clear),
             onPressed: () {
               _controller.clear();
-              di<SearchManager>().textChangedCommand.run('');
+              searchManagerRef().textChangedCommand.run('');
             },
           ),
         ),

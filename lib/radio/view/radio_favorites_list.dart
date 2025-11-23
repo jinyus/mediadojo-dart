@@ -5,6 +5,7 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/station_media.dart';
 import '../../player/player_manager.dart';
+import '../../register_dependencies.dart';
 import '../radio_manager.dart';
 import 'radio_browser_station_star_button.dart';
 import 'radio_host_not_connected_content.dart';
@@ -40,7 +41,7 @@ class RadioFavoritesList extends StatelessWidget with WatchItMixin {
             const Center(child: CircularProgressIndicator.adaptive()),
         onError: (error, _, _) => RadioHostNotConnectedContent(
           message: 'Error: $error',
-          onRetry: di<RadioManager>().favoriteStationsCommand.run,
+          onRetry: radioManagerRef().favoriteStationsCommand.run,
         ),
       );
 }
@@ -56,7 +57,7 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
         watchStream(
           (PlayerManager p) =>
               p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
-          initialValue: di<PlayerManager>().currentMedia?.id == media.id,
+          initialValue: playerManagerRef().currentMedia?.id == media.id,
           preserveState: false,
           allowStreamChange: true,
         ).data ??
@@ -70,7 +71,7 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
       trailing: RadioBrowserStationStarButton(media: media),
       selected: isCurrentlyPlaying,
       selectedColor: context.colorScheme.primary,
-      onTap: () => di<PlayerManager>().setPlaylist([media]),
+      onTap: () => playerManagerRef().setPlaylist([media]),
     );
   }
 }

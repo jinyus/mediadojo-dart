@@ -5,6 +5,7 @@ import '../../common/view/safe_network_image.dart';
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
+import '../../register_dependencies.dart';
 import '../data/local_media.dart';
 import '../data/unique_media.dart';
 import '../player_manager.dart';
@@ -68,22 +69,23 @@ class PlayerRemoteSourceImage extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final remoteSourceArtUrl = watchValue(
-      (PlayerManager p) =>
-          p.playerViewState.select((e) => e.remoteSourceArtUrl),
-    );
+    final remoteSourceArtUrl = watch(
+      playerManagerRef().playerViewState.select((e) => e.remoteSourceArtUrl),
+    ).value;
 
     final artUrl = watchStream(
-      (PlayerManager p) =>
-          p.currentMediaStream.map((e) => e?.artUrl ?? e?.collectionArtUrl),
+      null,
+      target: playerManagerRef().currentMediaStream.map(
+        (e) => e?.artUrl ?? e?.collectionArtUrl,
+      ),
       initialValue:
-          di<PlayerManager>().currentMedia?.artUrl ??
-          di<PlayerManager>().currentMedia?.collectionArtUrl,
+          playerManagerRef().currentMedia?.artUrl ??
+          playerManagerRef().currentMedia?.collectionArtUrl,
     ).data;
 
-    final color = watchValue(
-      (PlayerManager p) => p.playerViewState.select((e) => e.color),
-    );
+    final color = watch(
+      playerManagerRef().playerViewState.select((e) => e.color),
+    ).value;
 
     final playerIconColor = color ?? getPlayerIconColor(context.theme);
 
@@ -99,7 +101,7 @@ class PlayerRemoteSourceImage extends StatelessWidget with WatchItMixin {
           ),
         );
       },
-      onImageLoaded: di<PlayerManager>().setRemoteColorFromImageProvider,
+      onImageLoaded: playerManagerRef().setRemoteColorFromImageProvider,
       url: remoteSourceArtUrl ?? artUrl,
       filterQuality: FilterQuality.medium,
       fit: fit ?? BoxFit.scaleDown,

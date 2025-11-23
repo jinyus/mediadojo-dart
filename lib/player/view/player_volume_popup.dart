@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../extensions/build_context_x.dart';
 import 'package:flutter_it/flutter_it.dart';
+import '../../register_dependencies.dart';
 import '../player_manager.dart';
 import 'player_track.dart';
 
@@ -13,7 +14,7 @@ class PlayerVolumePopup extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final volume = watchStream(
       (PlayerManager p) => p.volumeStream,
-      initialValue: di<PlayerManager>().volume,
+      initialValue: playerManagerRef().volume,
       preserveState: false,
     ).data;
 
@@ -40,7 +41,7 @@ class PlayerVolumeSlider extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final volume = watchStream(
       (PlayerManager p) => p.volumeStream,
-      initialValue: di<PlayerManager>().volume,
+      initialValue: playerManagerRef().volume,
       preserveState: false,
     ).data;
     return RotatedBox(
@@ -52,7 +53,7 @@ class PlayerVolumeSlider extends StatelessWidget with WatchItMixin {
         child: Slider(
           value: volume?.clamp(0, 100) ?? 0,
           max: 100,
-          onChanged: (v) => di<PlayerManager>().setVolume(v),
+          onChanged: (v) => playerManagerRef().setVolume(v),
         ),
       ),
     );

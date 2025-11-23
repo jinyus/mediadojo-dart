@@ -1,10 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:state_beacon/state_beacon.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app/app_config.dart';
@@ -25,124 +25,122 @@ import 'search/search_manager.dart';
 import 'settings/settings_manager.dart';
 import 'settings/settings_service.dart';
 
-void registerDependencies() {
-  di
-    ..registerSingletonAsync<WindowManager>(() async {
-      final wm = WindowManager.instance;
-      await wm.ensureInitialized();
-      await wm.waitUntilReadyToShow(
-        const WindowOptions(
-          backgroundColor: Colors.transparent,
-          minimumSize: Size(500, 700),
-          size: Size(900, 800),
-          center: true,
-          skipTaskbar: false,
-          titleBarStyle: TitleBarStyle.hidden,
-        ),
-        () async {
-          await windowManager.show();
-          await windowManager.focus();
-        },
-      );
+final dioRef = Ref.singleton(Dio.new);
 
-      return wm;
-    })
-    ..registerSingletonAsync<SharedPreferences>(SharedPreferences.getInstance)
-    ..registerLazySingleton<VideoController>(() {
-      MediaKit.ensureInitialized();
-      return VideoController(
-        Player(
-          configuration: const PlayerConfiguration(title: AppConfig.appName),
-        ),
-      );
-    }, dispose: (s) => s.player.dispose())
-    ..registerLazySingleton<Dio>(() => Dio(), dispose: (s) => s.close())
-    ..registerSingletonAsync<PlayerManager>(
-      () async => AudioService.init(
-        config: AudioServiceConfig(
-          androidNotificationOngoing: false,
-          androidStopForegroundOnPause: false,
-          androidNotificationChannelName: AppConfig.appName,
-          androidNotificationChannelId:
-              Platforms.isAndroid || Platforms.isWindows
-              ? AppConfig.appId
-              : null,
-          androidNotificationChannelDescription: 'MusicPod Media Controls',
-        ),
-        builder: () => PlayerManager(controller: di<VideoController>()),
-      ),
-      // dependsOn: [VideoController],
-      dispose: (s) async => s.dispose(),
-    )
-    ..registerSingletonAsync<SettingsService>(() async {
-      final service = SettingsService(
-        sharedPreferences: di<SharedPreferences>(),
-      );
-      await service.init();
-      return service;
-    }, dependsOn: [SharedPreferences])
-    ..registerLazySingleton<NotificationsService>(() => NotificationsService())
-    ..registerSingletonWithDependencies<PodcastLibraryService>(
-      () => PodcastLibraryService(sharedPreferences: di<SharedPreferences>()),
-      dependsOn: [SharedPreferences],
-    )
-    ..registerSingletonWithDependencies<PodcastService>(
-      () => PodcastService(
-        libraryService: di<PodcastLibraryService>(),
-        notificationsService: di<NotificationsService>(),
-        settingsService: di<SettingsService>(),
-      ),
-      dependsOn: [PodcastLibraryService, SettingsService],
-    )
-    ..registerSingleton<SearchManager>(SearchManager())
-    ..registerSingletonWithDependencies<PodcastManager>(
-      () => PodcastManager(
-        podcastService: di<PodcastService>(),
-        searchManager: di<SearchManager>(),
-        collectionManager: di<CollectionManager>(),
-        podcastLibraryService: di<PodcastLibraryService>(),
-      ),
-      dependsOn: [PodcastService],
-    )
-    ..registerLazySingleton<ExternalPathService>(
-      () => const ExternalPathService(),
-    )
-    ..registerSingletonWithDependencies<SettingsManager>(
-      () => SettingsManager(
-        service: di<SettingsService>(),
-        externalPathService: di<ExternalPathService>(),
-      ),
-      dependsOn: [SettingsService],
-    )
-    ..registerSingletonWithDependencies<DownloadManager>(
-      () => DownloadManager(
-        libraryService: di<PodcastLibraryService>(),
-        settingsService: di<SettingsService>(),
-        dio: di<Dio>(),
-      ),
-      dependsOn: [SettingsService],
-    )
-    ..registerSingletonWithDependencies<RadioLibraryService>(
-      () => RadioLibraryService(sharedPreferences: di<SharedPreferences>()),
-      dependsOn: [SharedPreferences],
-    )
-    ..registerLazySingleton<OnlineArtService>(
-      () => OnlineArtService(dio: di<Dio>()),
-    )
-    ..registerSingletonWithDependencies<RadioService>(
-      () => RadioService(
-        playerManager: di<PlayerManager>(),
-        onlineArtService: di<OnlineArtService>(),
-      ),
-      dependsOn: [PlayerManager],
-    )
-    ..registerLazySingleton<CollectionManager>(() => CollectionManager())
-    ..registerLazySingleton<RadioManager>(
-      () => RadioManager(
-        radioLibraryService: di<RadioLibraryService>(),
-        radioService: di<RadioService>(),
-        searchManager: di<SearchManager>(),
-        collectionManager: di<CollectionManager>(),
-      ),
-    );
+late final SingletonRef<SharedPreferences> sharedPrefRef;
+
+final playerManagerRef = Ref.singleton<PlayerManager>(() {
+  final controller = VideoController(
+    Player(configuration: const PlayerConfiguration(title: AppConfig.appName)),
+  );
+  return PlayerManager(controller: controller);
+});
+
+final settingServiceRef = Ref.singleton<SettingsService>(
+  () => SettingsService(sharedPreferences: sharedPrefRef())..init(),
+);
+
+final notificationServiceRef = Ref.singleton(NotificationsService.new);
+
+final podcastLibraryServiceRef = Ref.singleton<PodcastLibraryService>(
+  () => PodcastLibraryService(sharedPreferences: sharedPrefRef()),
+);
+
+final podcastServiceRef = Ref.singleton(
+  () => PodcastService(
+    libraryService: podcastLibraryServiceRef(),
+    notificationsService: notificationServiceRef(),
+    settingsService: settingServiceRef(),
+  ),
+);
+
+final searchManagerRef = Ref.singleton(SearchManager.new);
+
+final collectionManagerRef = Ref.singleton(CollectionManager.new);
+
+final podcastManagerRef = Ref.singleton(
+  () => PodcastManager(
+    podcastService: podcastServiceRef(),
+    searchManager: searchManagerRef(),
+    collectionManager: collectionManagerRef(),
+    podcastLibraryService: podcastLibraryServiceRef(),
+  ),
+);
+
+final externalPathServiceRef = Ref.singleton(() => const ExternalPathService());
+
+final settingsManagerRef = Ref.singleton(
+  () => SettingsManager(
+    service: settingServiceRef(),
+    externalPathService: externalPathServiceRef(),
+  ),
+);
+
+final downloadManagerRef = Ref.singleton(
+  () => DownloadManager(
+    libraryService: podcastLibraryServiceRef(),
+    settingsService: settingServiceRef(),
+    dio: dioRef(),
+  ),
+);
+
+final radioLibraryServiceRef = Ref.singleton(
+  () => RadioLibraryService(sharedPreferences: sharedPrefRef()),
+);
+
+final onlineArtServiceRef = Ref.singleton(
+  () => OnlineArtService(dio: dioRef()),
+);
+
+final radioServiceRef = Ref.singleton(
+  () => RadioService(
+    playerManager: playerManagerRef(),
+    onlineArtService: onlineArtServiceRef(),
+  ),
+);
+
+final radioManagerRef = Ref.singleton(
+  () => RadioManager(
+    radioLibraryService: radioLibraryServiceRef(),
+    radioService: radioServiceRef(),
+    searchManager: searchManagerRef(),
+    collectionManager: collectionManagerRef(),
+  ),
+);
+
+Future<void> startUp() async {
+  final wm = WindowManager.instance;
+  await wm.ensureInitialized();
+  await wm.waitUntilReadyToShow(
+    const WindowOptions(
+      backgroundColor: Colors.transparent,
+      minimumSize: Size(500, 700),
+      size: Size(900, 800),
+      center: true,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.hidden,
+    ),
+    () async {
+      await windowManager.show();
+      await windowManager.focus();
+    },
+  );
+
+  final sharedPref = await SharedPreferences.getInstance();
+  sharedPrefRef = Ref.singleton<SharedPreferences>(() => sharedPref);
+
+  MediaKit.ensureInitialized();
+
+  await AudioService.init(
+    config: AudioServiceConfig(
+      androidNotificationOngoing: false,
+      androidStopForegroundOnPause: false,
+      androidNotificationChannelName: AppConfig.appName,
+      androidNotificationChannelId: Platforms.isAndroid || Platforms.isWindows
+          ? AppConfig.appId
+          : null,
+      androidNotificationChannelDescription: 'MusicPod Media Controls',
+    ),
+    builder: () => playerManagerRef.instance,
+  );
 }
