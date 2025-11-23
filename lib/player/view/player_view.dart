@@ -22,17 +22,18 @@ class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
   Widget build(BuildContext context) {
     final media = watchStream(
       (PlayerManager p) => p.currentMediaStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
 
-    final isFullMode = watchValue(
-      (PlayerManager p) => p.playerViewState.select((e) => e.fullMode),
-    );
+    final isFullMode = watch(
+      playerManagerRef().playerViewState.select((e) => e.fullMode),
+    ).value;
 
-    final color = watchValue(
-      (PlayerManager p) => p.playerViewState.select((e) => e.color),
-    );
+    final color = watch(
+      playerManagerRef().playerViewState.select((e) => e.color),
+    ).value;
 
     final colorScheme = context.colorScheme;
 

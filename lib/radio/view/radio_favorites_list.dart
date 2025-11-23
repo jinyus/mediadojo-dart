@@ -16,9 +16,7 @@ class RadioFavoritesList extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) =>
-      watchValue(
-        (RadioManager s) => s.favoriteStationsCommand.results,
-      ).toWidget(
+      watch(radioManagerRef().favoriteStationsCommand.results).value.toWidget(
         onData: (favorites, _) => ListView.builder(
           padding: const EdgeInsets.only(
             top: kSmallPadding,
@@ -57,6 +55,7 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
         watchStream(
           (PlayerManager p) =>
               p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
+          target: playerManagerRef(),
           initialValue: playerManagerRef().currentMedia?.id == media.id,
           preserveState: false,
           allowStreamChange: true,

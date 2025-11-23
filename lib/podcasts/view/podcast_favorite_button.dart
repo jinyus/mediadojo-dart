@@ -17,11 +17,11 @@ class PodcastFavoriteButton extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isSubscribed = watchValue(
-      (PodcastManager m) => m.podcastsCommand.select(
+    final isSubscribed = watch(
+      podcastManagerRef().podcastsCommand.select(
         (podcasts) => podcasts.any((p) => p.feedUrl == podcastItem.feedUrl),
       ),
-    );
+    ).value;
 
     void onPressed() => isSubscribed
         ? podcastManagerRef().removePodcast(feedUrl: podcastItem.feedUrl!)

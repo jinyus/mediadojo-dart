@@ -13,11 +13,11 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final duration = watchValue((PlayerManager p) => p.duration);
+    final duration = watch(playerManagerRef().duration).value;
 
-    final position = watchValue((PlayerManager p) => p.position);
+    final position = watch(playerManagerRef().position).value;
 
-    final buffer = watchValue((PlayerManager p) => p.buffer);
+    final buffer = watch(playerManagerRef().buffer).value;
 
     final sliderActive = duration.inSeconds > position.inSeconds;
 
@@ -37,6 +37,7 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
     final isPlaying =
         watchStream(
           (PlayerManager p) => p.isPlayingStream,
+          target: playerManagerRef(),
           initialValue: playerManagerRef().isPlaying,
         ).data ??
         false;

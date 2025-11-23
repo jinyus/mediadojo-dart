@@ -30,9 +30,9 @@ class SettingsDialog extends StatelessWidget with WatchItMixin {
                 context.l10n.downloadsDirectoryDescription(AppConfig.appName),
               ),
             ),
-            watchValue(
-              (SettingsManager m) => m.downloadsDirCommand.results,
-            ).toWidget(
+            watch(
+              settingsManagerRef().downloadsDirCommand.results,
+            ).value.toWidget(
               onData: (dir, param) => Text(dir ?? ''),
               whileRunning: (_, _) => const SizedBox(
                 width: 16,

@@ -14,6 +14,7 @@ class PlayerVolumePopup extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final volume = watchStream(
       (PlayerManager p) => p.volumeStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().volume,
       preserveState: false,
     ).data;
@@ -41,6 +42,7 @@ class PlayerVolumeSlider extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final volume = watchStream(
       (PlayerManager p) => p.volumeStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().volume,
       preserveState: false,
     ).data;

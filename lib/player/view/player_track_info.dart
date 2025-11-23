@@ -30,6 +30,7 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final media = watchStream(
       (PlayerManager p) => p.currentMediaStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
@@ -40,9 +41,9 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
 
     final textTheme = context.textTheme;
 
-    final remoteTitle = watchValue(
-      (PlayerManager p) => p.playerViewState.select((e) => e.remoteSourceTitle),
-    );
+    final remoteTitle = watch(
+      playerManagerRef().playerViewState.select((e) => e.remoteSourceTitle),
+    ).value;
 
     return InkWell(
       onTap: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -111,9 +112,9 @@ class PlayerTrackProgressTimeText extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
-    final duration = watchValue((PlayerManager p) => p.duration);
+    final duration = watch(playerManagerRef().duration).value;
 
-    final position = watchValue((PlayerManager p) => p.position);
+    final position = watch(playerManagerRef().position).value;
 
     const positionWidth = 60.0;
     const durationWidth = 60.0;

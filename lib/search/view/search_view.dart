@@ -1,3 +1,4 @@
+import '../../register_dependencies.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_it/flutter_it.dart';
 
@@ -13,7 +14,7 @@ class SearchView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final searchType = watchValue((SearchManager m) => m.searchTypeNotifier);
+    final searchType = watch(searchManagerRef().searchTypeNotifier).value;
     return Column(
       spacing: kMediumPadding,
       children: [

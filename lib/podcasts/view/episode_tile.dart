@@ -32,6 +32,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
 
     final currentMedia = watchStream(
       (PlayerManager m) => m.currentMediaStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().currentMedia,
     ).data;
 
@@ -40,6 +41,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
     final isPlaying =
         watchStream(
           (PlayerManager p) => p.isPlayingStream,
+          target: playerManagerRef(),
           initialValue: playerManagerRef().isPlaying,
           preserveState: false,
         ).data ??

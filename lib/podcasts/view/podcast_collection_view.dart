@@ -1,3 +1,4 @@
+import '../../register_dependencies.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
@@ -12,7 +13,7 @@ class PodcastCollectionView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) =>
-      watchValue((PodcastManager m) => m.podcastsCommand.results).toWidget(
+      watch(podcastManagerRef().podcastsCommand.results).value.toWidget(
         onData: (podcasts, _) => GridView.builder(
           padding: kGridViewPadding.copyWith(top: kBigPadding),
           gridDelegate: kGridViewDelegate,

@@ -55,7 +55,7 @@ class PlayerShuffleButton extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final shuffle = watchValue((PlayerManager p) => p.shuffle);
+    final shuffle = watch(playerManagerRef().shuffle).value;
     return IconButton(
       style: playerButtonStyle,
       icon: Icon(Icons.shuffle, color: shuffle ? selectedColor : iconColor),
@@ -78,6 +78,7 @@ class PlayerPlaylistModeButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final playlistMode = watchStream(
       (PlayerManager p) => p.playlistModeStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().playlistMode,
       preserveState: true,
     ).data;
@@ -108,6 +109,7 @@ class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final isPlaying = watchStream(
       (PlayerManager p) => p.isPlayingStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().isPlaying,
       preserveState: true,
     ).data;

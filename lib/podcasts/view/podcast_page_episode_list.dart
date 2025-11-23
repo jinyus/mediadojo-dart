@@ -18,9 +18,9 @@ class PodcastPageEpisodeList extends StatelessWidget with WatchItMixin {
       (context) => podcastManagerRef().fetchEpisodeMediaCommand(podcastItem),
     );
 
-    return watchValue(
-      (PodcastManager m) => m.fetchEpisodeMediaCommand.results,
-    ).toWidget(
+    return watch(
+      podcastManagerRef().fetchEpisodeMediaCommand.results,
+    ).value.toWidget(
       onData: (episodes, param) => SliverList.builder(
         itemCount: episodes.length,
         itemBuilder: (context, index) => EpisodeTile(

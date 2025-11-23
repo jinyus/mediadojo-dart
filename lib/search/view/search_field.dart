@@ -32,7 +32,7 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final searchType = watchValue((SearchManager s) => s.searchTypeNotifier);
+    final searchType = watch(searchManagerRef().searchTypeNotifier).value;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: kBigPadding,

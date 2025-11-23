@@ -28,12 +28,14 @@ class _PlayerQueueState extends State<PlayerQueue> {
   Widget build(BuildContext context) {
     final medias = watchStream(
       (PlayerManager p) => p.mediasStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().medias,
       preserveState: true,
     ).data;
 
     final playlistIndex = watchStream(
       (PlayerManager p) => p.playlistIndexStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().playlistIndex,
       preserveState: true,
     ).data;

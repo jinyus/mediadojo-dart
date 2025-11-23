@@ -32,15 +32,14 @@ class DownloadButton extends StatelessWidget with WatchItMixin {
           (PodcastLibraryService m) => m.propertiesChanged
               .map((_) => m.getDownload(audio?.url) != null)
               .distinct(),
+          target: podcastLibraryServiceRef(),
           initialValue:
               podcastLibraryServiceRef().getDownload(audio?.url) != null,
           preserveState: false,
         ).data ??
         false;
 
-    final downloadsDir = watchValue(
-      (SettingsManager m) => m.downloadsDirCommand,
-    );
+    final downloadsDir = watch(settingsManagerRef().downloadsDirCommand).value;
 
     final radius = theme.buttonTheme.height / 2;
 

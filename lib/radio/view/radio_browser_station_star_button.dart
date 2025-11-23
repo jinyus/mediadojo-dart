@@ -14,11 +14,11 @@ class RadioBrowserStationStarButton extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = watchValue(
-      (RadioManager s) => s.favoriteStationsCommand.select(
+    final isFavorite = watch(
+      radioManagerRef().favoriteStationsCommand.select(
         (favorites) => favorites.any((m) => m.id == media.id),
       ),
-    );
+    ).value;
     return IconButton(
       onPressed: () => isFavorite
           ? radioManagerRef().removeFavoriteStation(media.id)
@@ -35,14 +35,15 @@ class RadioStationStarButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final currentMedia = watchStream(
       (PlayerManager p) => p.currentMediaStream,
+      target: playerManagerRef(),
       initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
-    final isFavorite = watchValue(
-      (RadioManager s) => s.favoriteStationsCommand.select(
+    final isFavorite = watch(
+      radioManagerRef().favoriteStationsCommand.select(
         (favorites) => favorites.any((m) => m.id == currentMedia?.id),
       ),
-    );
+    ).value;
     return IconButton(
       onPressed: currentMedia == null
           ? null

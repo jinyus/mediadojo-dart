@@ -16,7 +16,7 @@ class RadioBrowser extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) =>
-      watchValue((RadioManager s) => s.updateSearchCommand.results).toWidget(
+      watch(radioManagerRef().updateSearchCommand.results).value.toWidget(
         whileRunning: (lastResult, param) =>
             const Center(child: CircularProgressIndicator.adaptive()),
         onError: (error, param, lastResult) => RadioHostNotConnectedContent(
@@ -47,6 +47,7 @@ class RadioBrowserTile extends StatelessWidget with WatchItMixin {
         watchStream(
           (PlayerManager p) =>
               p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
+          target: playerManagerRef(),
           initialValue: playerManagerRef().currentMedia?.id == media.id,
           preserveState: false,
           allowStreamChange: true,
