@@ -402,10 +402,9 @@ packages:
   flutter_it:
     dependency: "direct main"
     description:
-      name: flutter_it
-      sha256: "81fe23d007abd87f26a3dec0b52ad2772ecd3b6d3c8f7e6e1daa24c04c9b1a2d"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/flutter_it"
+      relative: true
+    source: path
     version: "2.0.0"
   flutter_launcher_icons:
     dependency: "direct dev"
@@ -1386,10 +1385,9 @@ packages:
   watch_it:
     dependency: transitive
     description:
-      name: watch_it
-      sha256: "98e091d39aab70c57c6d38883ad83b9a22a0e12683e0222391d20d61cda4d250"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/watch_it"
+      relative: true
+    source: path
     version: "2.1.1"
   web:
     dependency: transitive

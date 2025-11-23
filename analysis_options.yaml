@@ -18,3 +18,7 @@ linter:
     unnecessary_breaks: true
     unawaited_futures: true
     cascade_invocations: true
+
+analyzer:
+  exclude:
+    - packages/**

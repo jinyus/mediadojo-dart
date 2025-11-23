@@ -69,8 +69,8 @@ final podcastManagerRef = Ref.singleton(
 
 final externalPathServiceRef = Ref.singleton(() => const ExternalPathService());
 
-final settingsManagerRef = Ref.singleton(
-  () => SettingsManager(
+final settingsControllerRef = Ref.singleton(
+  () => SettingsController(
     service: settingServiceRef(),
     externalPathService: externalPathServiceRef(),
   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/episode_media.dart';
 import '../../register_dependencies.dart';
@@ -39,7 +40,9 @@ class DownloadButton extends StatelessWidget with WatchItMixin {
         ).data ??
         false;
 
-    final downloadsDir = watch(settingsManagerRef().downloadsDirCommand).value;
+    final downloadsDir = settingsControllerRef().currentDir
+        .watch(context)
+        .lastData;
 
     final radius = theme.buttonTheme.height / 2;
 
