@@ -22,7 +22,7 @@ import 'radio/radio_library_service.dart';
 import 'radio/radio_manager.dart';
 import 'radio/radio_service.dart';
 import 'search/search_manager.dart';
-import 'settings/settings_manager.dart';
+import 'settings/settings_controller.dart';
 import 'settings/settings_service.dart';
 
 final dioRef = Ref.singleton(Dio.new);
