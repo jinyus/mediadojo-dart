@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:state_beacon/state_beacon.dart';
 
 import '../../app/app_config.dart';
 import '../../common/view/confirm.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
-import '../settings_manager.dart';
 
 class SettingsDialog extends StatelessWidget with WatchItMixin {
   const SettingsDialog({super.key});

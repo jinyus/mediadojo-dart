@@ -14,7 +14,6 @@ import '../../extensions/string_x.dart';
 import '../../player/view/player_view.dart';
 import '../../register_dependencies.dart';
 import '../data/podcast_genre.dart';
-import '../podcast_service.dart';
 import 'podcast_favorite_button.dart';
 import 'podcast_page_episode_list.dart';
 

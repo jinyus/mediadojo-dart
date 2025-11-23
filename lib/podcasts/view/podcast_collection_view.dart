@@ -5,7 +5,6 @@ import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 
 import '../../common/view/ui_constants.dart';
-import '../podcast_manager.dart';
 import 'podcast_card.dart';
 
 class PodcastCollectionView extends StatelessWidget with WatchItMixin {

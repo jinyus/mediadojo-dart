@@ -3,7 +3,6 @@ import 'package:flutter_it/flutter_it.dart';
 
 import '../extensions/color_x.dart';
 import '../l10n/app_localizations.dart';
-import '../player/player_manager.dart';
 import '../register_dependencies.dart';
 
 class App extends StatelessWidget with WatchItMixin {

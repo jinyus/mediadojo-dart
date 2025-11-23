@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:future_loading_dialog/future_loading_dialog.dart';
 import 'package:phoenix_theme/phoenix_theme.dart';
 import 'package:podcast_search/podcast_search.dart';
@@ -8,10 +7,7 @@ import '../../common/view/safe_network_image.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/string_x.dart';
-import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
-import '../podcast_library_service.dart';
-import '../podcast_service.dart';
 import 'podcast_favorite_button.dart';
 import 'podcast_page.dart';
 

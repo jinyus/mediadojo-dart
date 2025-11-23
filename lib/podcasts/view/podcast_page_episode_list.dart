@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 
-import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
-import '../podcast_manager.dart';
 import 'episode_tile.dart';
 
 class PodcastPageEpisodeList extends StatelessWidget with WatchItMixin {

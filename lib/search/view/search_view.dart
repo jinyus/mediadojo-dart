@@ -6,7 +6,6 @@ import '../../common/media_type.dart';
 import '../../common/view/ui_constants.dart';
 import '../../podcasts/view/podcast_search_view.dart';
 import '../../radio/view/radio_browser.dart';
-import '../search_manager.dart';
 import 'search_field.dart';
 
 class SearchView extends StatelessWidget with WatchItMixin {

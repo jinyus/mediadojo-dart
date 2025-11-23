@@ -5,7 +5,6 @@ import 'package:yaru/yaru.dart';
 import '../../player/data/unique_media.dart';
 import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
-import '../radio_manager.dart';
 
 class RadioBrowserStationStarButton extends StatelessWidget with WatchItMixin {
   const RadioBrowserStationStarButton({super.key, required this.media});

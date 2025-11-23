@@ -4,7 +4,6 @@ import 'package:state_beacon/state_beacon.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/episode_media.dart';
 import '../../register_dependencies.dart';
-import '../../settings/settings_manager.dart';
 import '../download_manager.dart';
 import '../podcast_library_service.dart';
 

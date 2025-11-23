@@ -6,7 +6,6 @@ import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
-import '../search_manager.dart';
 
 class SearchField extends StatefulWidget with WatchItStatefulWidgetMixin {
   const SearchField({super.key});

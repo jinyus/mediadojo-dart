@@ -5,7 +5,6 @@ import 'package:yaru/yaru.dart';
 import '../collection/view/collection_view.dart';
 import '../common/view/ui_constants.dart';
 import '../extensions/build_context_x.dart';
-import '../player/player_manager.dart';
 import '../player/view/player_full_view.dart';
 import '../player/view/player_view.dart';
 import '../podcasts/download_manager.dart';

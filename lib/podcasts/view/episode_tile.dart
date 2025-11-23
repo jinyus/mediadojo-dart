@@ -11,7 +11,6 @@ import '../../player/data/episode_media.dart';
 import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
 import '../data/podcast_metadata.dart';
-import '../podcast_manager.dart';
 import 'download_button.dart';
 
 class EpisodeTile extends StatelessWidget with WatchItMixin {

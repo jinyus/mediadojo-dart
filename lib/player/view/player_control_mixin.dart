@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 
 import '../../common/view/confirm.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 import '../data/unique_media.dart';
-import '../player_manager.dart';
 import 'player_full_view.dart';
 
 mixin PlayerControlMixin {
