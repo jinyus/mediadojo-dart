@@ -19,7 +19,7 @@ import 'podcasts/podcast_library_service.dart';
 import 'podcasts/podcast_manager.dart';
 import 'podcasts/podcast_service.dart';
 import 'radio/radio_library_service.dart';
-import 'radio/radio_controllerdart';
+import 'radio/radio_controller.dart';
 import 'radio/radio_service.dart';
 import 'search/search_manager.dart';
 import 'settings/settings_manager.dart';
