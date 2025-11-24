@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
@@ -112,9 +113,11 @@ class PlayerTrackProgressTimeText extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
+    final controller = playerManagerRef();
+
     final duration = watch(playerManagerRef().duration).value;
 
-    final position = watch(playerManagerRef().position).value;
+    final position = controller.position.watch(context);
 
     const positionWidth = 60.0;
     const durationWidth = 60.0;

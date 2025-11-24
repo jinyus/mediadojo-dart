@@ -4,13 +4,15 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../common/logging.dart';
 import '../extensions/color_x.dart';
 import 'data/unique_media.dart';
 import 'view/player_view_state.dart';
 
-class PlayerManager extends BaseAudioHandler with SeekHandler {
+class PlayerManager extends BaseAudioHandler
+    with SeekHandler, BeaconController {
   PlayerManager({required VideoController controller})
     : _controller = controller {
     playbackState.add(
@@ -29,9 +31,6 @@ class PlayerManager extends BaseAudioHandler with SeekHandler {
           MediaControl.skipToNext,
         ],
       ),
-    );
-    _positionSubscription = controller.player.stream.position.listen(
-      _setPosition,
     );
     _durationSubscription = controller.player.stream.duration.listen(
       _setDuration,
@@ -97,14 +96,14 @@ class PlayerManager extends BaseAudioHandler with SeekHandler {
   Player get _player => _controller.player;
   Player get player => _player;
 
-  StreamSubscription<Duration>? _positionSubscription;
-  final _position = ValueNotifier(Duration.zero);
-  ValueNotifier<Duration> get position => _position;
-  void _setPosition(Duration value) {
-    playbackState.add(playbackState.value.copyWith(updatePosition: value));
-    if (value.inSeconds == _position.value.inSeconds) return;
-    _position.value = value;
-  }
+  late final position =
+      B.streamRaw(
+        () => _controller.player.stream.position,
+        initialValue: Duration.zero,
+        shouldSleep: false,
+      )..subscribe((pos) {
+        playbackState.add(playbackState.value.copyWith(updatePosition: pos));
+      }, startNow: false);
 
   StreamSubscription<Duration>? _bufferedSubscription;
   final _buffer = ValueNotifier(Duration.zero);
@@ -272,6 +271,7 @@ class PlayerManager extends BaseAudioHandler with SeekHandler {
   Future<void> skipToNext() async => _player.next();
 
   bool _firstClick = true;
+
   @override
   Future<void> skipToPrevious() async {
     if (position.value.inSeconds < 10 && _firstClick) {
@@ -300,8 +300,8 @@ class PlayerManager extends BaseAudioHandler with SeekHandler {
   Future<void> setPlaylistMode(PlaylistMode mode) async =>
       _player.setPlaylistMode(mode);
 
+  @override
   Future<void> dispose() async {
-    await _positionSubscription?.cancel();
     await _durationSubscription?.cancel();
     await _bufferedSubscription?.cancel();
     await _player.dispose();

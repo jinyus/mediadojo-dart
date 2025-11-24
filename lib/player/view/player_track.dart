@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
@@ -13,9 +14,11 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    final controller = playerManagerRef();
+
     final duration = watch(playerManagerRef().duration).value;
 
-    final position = watch(playerManagerRef().position).value;
+    final position = controller.position.watch(context);
 
     final buffer = watch(playerManagerRef().buffer).value;
 
