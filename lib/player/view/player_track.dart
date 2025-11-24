@@ -20,6 +20,8 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
 
     final slider = controller.slider.watch(context);
 
+    final isPlaying = controller.isPlaying.watch(context);
+
     const thumbShape = RoundSliderThumbShape(
       elevation: 0,
       enabledThumbRadius: 0,
@@ -27,14 +29,6 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
     );
 
     final trackColor = getPlayerIconColor(context.theme);
-
-    final isPlaying =
-        watchStream(
-          (PlayerManager p) => p.isPlayingStream,
-          target: playerManagerRef(),
-          initialValue: playerManagerRef().isPlaying,
-        ).data ??
-        false;
 
     return RepaintBoundary(
       child: (duration.inSeconds < 10) && isPlaying

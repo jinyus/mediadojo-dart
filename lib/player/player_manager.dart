@@ -136,23 +136,24 @@ class PlayerManager extends BaseAudioHandler
         }
       }, startNow: false);
 
-  Stream<bool> get isPlayingStream => _player.stream.playing.map((e) {
-    playbackState.add(
-      playbackState.value.copyWith(
-        playing: isPlaying,
-        controls: [
-          MediaControl.skipToPrevious,
-          isPlaying ? MediaControl.pause : MediaControl.play,
+  late final isPlaying =
+      _player.stream.playing.toRawBeacon(
+        shouldSleep: false,
+        initialValue: false,
+      )..subscribe((val) {
+        playbackState.add(
+          playbackState.value.copyWith(
+            playing: val,
+            controls: [
+              MediaControl.skipToPrevious,
+              val ? MediaControl.pause : MediaControl.play,
 
-          MediaControl.skipToNext,
-        ],
-        processingState: AudioProcessingState.ready,
-      ),
-    );
-    return e;
-  });
-
-  bool get isPlaying => _player.state.playing;
+              MediaControl.skipToNext,
+            ],
+            processingState: AudioProcessingState.ready,
+          ),
+        );
+      });
 
   Stream<Playlist> get _playlistStream => _player.stream.playlist;
 

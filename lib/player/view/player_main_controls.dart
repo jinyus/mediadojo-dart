@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/ui_constants.dart';
 import '../../register_dependencies.dart';
@@ -107,12 +108,9 @@ class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isPlaying = watchStream(
-      (PlayerManager p) => p.isPlayingStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().isPlaying,
-      preserveState: true,
-    ).data;
+    final controller = playerManagerRef();
+
+    final isPlaying = controller.isPlaying.watch(context);
 
     return IconButton(
       style: playerButtonStyle,

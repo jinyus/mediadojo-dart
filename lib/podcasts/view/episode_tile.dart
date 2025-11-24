@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/html_text.dart';
 import '../../common/view/ui_constants.dart';
@@ -27,6 +28,10 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    final controller = playerManagerRef();
+
+    final isPlaying = controller.isPlaying.watch(context);
+
     final theme = context.theme;
 
     final currentMedia = watchStream(
@@ -37,21 +42,12 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
 
     final selected = currentMedia?.id == episode.id;
 
-    final isPlaying =
-        watchStream(
-          (PlayerManager p) => p.isPlayingStream,
-          target: playerManagerRef(),
-          initialValue: playerManagerRef().isPlaying,
-          preserveState: false,
-        ).data ??
-        false;
-
     void onPressed() {
       if (isPlaying && selected) {
-        playerManagerRef().pause();
+        controller.pause();
       } else {
         if (selected) {
-          playerManagerRef().playOrPause();
+          controller.playOrPause();
         } else {
           setPlaylist();
         }
