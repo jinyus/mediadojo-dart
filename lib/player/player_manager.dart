@@ -82,7 +82,7 @@ class PlayerManager extends BaseAudioHandler
       mediaItem.add(
         mediaItem.value?.copyWith(
           title: remoteSourceTitle,
-          artist: currentMedia?.artist,
+          artist: currentMedia.value?.artist,
           artUri: artUri,
         ),
       );
@@ -169,12 +169,7 @@ class PlayerManager extends BaseAudioHandler
 
   Playlist get playlist => _player.state.playlist;
 
-  UniqueMedia? get currentMedia => _player.state.playlist.medias
-      .whereType<UniqueMedia>()
-      .toList()
-      .elementAtOrNull(_player.state.playlist.index);
-
-  late final currentMediaBeacon =
+  late final currentMedia =
       _player.stream.playlist.map((playlist) {
         return playlist.medias
             .whereType<UniqueMedia>()
@@ -204,7 +199,7 @@ class PlayerManager extends BaseAudioHandler
       });
 
   late final currentArtUrl = B.derived(() {
-    final media = currentMediaBeacon.value;
+    final media = currentMedia.value;
 
     return media?.artUrl ?? media?.collectionArtUrl;
   });

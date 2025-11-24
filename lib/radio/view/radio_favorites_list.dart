@@ -54,7 +54,7 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final playerController = playerManagerRef();
-    final currentMedia = playerController.currentMediaBeacon.watch(context);
+    final currentMedia = playerController.currentMedia.watch(context);
 
     final isCurrentMedia = currentMedia?.id == media.id;
 

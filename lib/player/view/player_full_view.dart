@@ -36,7 +36,7 @@ class PlayerFullView extends StatelessWidget
         ).data ??
         false;
 
-    final media = controller.currentMediaBeacon.watch(context);
+    final media = controller.currentMedia.watch(context);
 
     final color =
         watch(

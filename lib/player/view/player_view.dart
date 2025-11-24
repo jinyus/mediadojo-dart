@@ -22,7 +22,7 @@ class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
   @override
   Widget build(BuildContext context) {
     final controller = playerManagerRef();
-    final media = controller.currentMediaBeacon.watch(context);
+    final media = controller.currentMedia.watch(context);
 
     final isFullMode = watch(
       playerManagerRef().playerViewState.select((e) => e.fullMode),
