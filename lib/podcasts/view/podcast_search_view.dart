@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/no_search_result_page.dart';
 import '../../common/view/ui_constants.dart';
@@ -7,13 +8,16 @@ import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 import 'podcast_card.dart';
 
-class PodcastSearchViewNew extends StatelessWidget with WatchItMixin {
+class PodcastSearchViewNew extends StatelessWidget {
   const PodcastSearchViewNew({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      watch(podcastManagerRef().updateSearchCommand.results).value.toWidget(
-        onData: (result, param) => result.items.isEmpty
+  Widget build(BuildContext context) {
+    final controller = podcastControllerRef();
+
+    return switch (controller.results.watch(context)) {
+      AsyncData(value: final result) =>
+        result.items.isEmpty
             ? NoSearchResultPage(message: Text(context.l10n.nothingFound))
             : GridView.builder(
                 itemCount: result.items.length,
@@ -24,9 +28,8 @@ class PodcastSearchViewNew extends StatelessWidget with WatchItMixin {
                   podcastItem: result.items.elementAt(index),
                 ),
               ),
-        onError: (error, lastResult, param) =>
-            NoSearchResultPage(message: Text(error.toString())),
-        whileRunning: (res, query) =>
-            const Center(child: CircularProgressIndicator.adaptive()),
-      );
+      AsyncError e => NoSearchResultPage(message: Text(e.error.toString())),
+      _ => const Center(child: CircularProgressIndicator.adaptive()),
+    };
+  }
 }

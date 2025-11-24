@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/media_type.dart';
 import '../../common/view/theme.dart';
@@ -7,39 +8,20 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 
-class CollectionSearchField extends StatefulWidget
-    with WatchItStatefulWidgetMixin {
+class CollectionSearchField extends StatelessWidget {
   const CollectionSearchField({super.key});
 
   @override
-  State<CollectionSearchField> createState() => _CollectionSearchFieldState();
-}
-
-class _CollectionSearchFieldState extends State<CollectionSearchField> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.text = collectionManagerRef().textChangedCommand.value;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final searchType = watch(collectionManagerRef().mediaTypeNotifier).value;
+    final colController = collectionControllerRef();
+    final searchType = colController.mediaType.watch(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: kBigPadding,
       ).copyWith(top: kBigPadding, bottom: kSmallPadding),
       child: TextField(
-        controller: _controller,
-        onChanged: collectionManagerRef().textChangedCommand.run,
+        controller: colController.searchText.controller,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: context.colorScheme.primary),
@@ -57,7 +39,7 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
                     icon: Icon(e.iconData()),
                     tooltip: e.localize(context),
                     onPressed: () {
-                      collectionManagerRef().mediaTypeNotifier.value = e;
+                      colController.mediaType.value = e;
                     },
                   ),
                 )
@@ -67,8 +49,7 @@ class _CollectionSearchFieldState extends State<CollectionSearchField> {
             style: getTextFieldSuffixStyle(context),
             icon: const Icon(Icons.clear),
             onPressed: () {
-              _controller.clear();
-              collectionManagerRef().textChangedCommand.run('');
+              colController.searchText.text = '';
             },
           ),
         ),

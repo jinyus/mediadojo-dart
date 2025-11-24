@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/media_type.dart';
 import '../../common/view/theme.dart';
@@ -7,38 +8,19 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 
-class SearchField extends StatefulWidget with WatchItStatefulWidgetMixin {
+class SearchField extends StatelessWidget {
   const SearchField({super.key});
 
   @override
-  State<SearchField> createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<SearchField> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.text = searchManagerRef().textChangedCommand.value;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final searchType = watch(searchManagerRef().searchTypeNotifier).value;
+    final searchController = searchControllerRef();
+    final searchType = searchController.searchType.watch(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: kBigPadding,
       ).copyWith(top: kBigPadding, bottom: kSmallPadding),
       child: TextField(
-        controller: _controller,
-        onChanged: searchManagerRef().textChangedCommand.run,
+        controller: searchController.searchText.controller,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: context.colorScheme.primary),
@@ -56,7 +38,7 @@ class _SearchFieldState extends State<SearchField> {
                     icon: Icon(e.iconData()),
                     tooltip: e.localize(context),
                     onPressed: () {
-                      searchManagerRef().searchTypeNotifier.value = e;
+                      searchController.searchType.value = e;
                     },
                   ),
                 )
@@ -66,8 +48,7 @@ class _SearchFieldState extends State<SearchField> {
             style: getTextFieldSuffixStyle(context),
             icon: const Icon(Icons.clear),
             onPressed: () {
-              _controller.clear();
-              searchManagerRef().textChangedCommand.run('');
+              searchController.searchText.text = '';
             },
           ),
         ),

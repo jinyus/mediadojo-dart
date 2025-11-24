@@ -22,7 +22,7 @@ import 'radio/radio_library_service.dart';
 import 'radio/radio_manager.dart';
 import 'radio/radio_service.dart';
 import 'search/search_manager.dart';
-import 'settings/settings_controller.dart';
+import 'settings/settings_manager.dart';
 import 'settings/settings_service.dart';
 
 final dioRef = Ref.singleton(Dio.new);
@@ -58,11 +58,15 @@ final searchManagerRef = Ref.singleton(SearchManager.new);
 
 final collectionManagerRef = Ref.singleton(CollectionManager.new);
 
-final podcastManagerRef = Ref.singleton(
-  () => PodcastManager(
+final searchControllerRef = Ref.singleton(SearchTextController.new);
+
+final collectionControllerRef = Ref.singleton(CollectionController.new);
+
+final podcastControllerRef = Ref.singleton(
+  () => PodcastController(
     podcastService: podcastServiceRef(),
-    searchManager: searchManagerRef(),
-    collectionManager: collectionManagerRef(),
+    searchController: searchControllerRef(),
+    collectionController: collectionControllerRef(),
     podcastLibraryService: podcastLibraryServiceRef(),
   ),
 );

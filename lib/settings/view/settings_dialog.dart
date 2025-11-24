@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:state_beacon/state_beacon.dart';
 
 import '../../app/app_config.dart';
@@ -7,7 +6,7 @@ import '../../common/view/confirm.dart';
 import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 
-class SettingsDialog extends StatelessWidget with WatchItMixin {
+class SettingsDialog extends StatelessWidget {
   const SettingsDialog({super.key});
 
   @override

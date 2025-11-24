@@ -1,5 +1,6 @@
 import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../collection/collection_manager.dart';
 import '../common/logging.dart';
@@ -15,64 +16,59 @@ import 'podcast_service.dart';
 /// Note: This manager is registered as a singleton in get_it and lives for the
 /// entire app lifetime. Commands and subscriptions don't need explicit disposal
 /// as they're automatically cleaned up when the app process terminates.
-class PodcastManager {
-  PodcastManager({
+
+class PodcastController with BeaconController {
+  PodcastController({
     required PodcastService podcastService,
-    required SearchManager searchManager,
-    required CollectionManager collectionManager,
+    required SearchTextController searchController,
+    required CollectionController collectionController,
     required PodcastLibraryService podcastLibraryService,
   }) : _podcastService = podcastService,
-       _podcastLibraryService = podcastLibraryService {
-    Command.globalExceptionHandler = (e, s) {
-      printMessageInDebugMode(e.error, s);
-    };
-    updateSearchCommand = Command.createAsync<String?, SearchResult>(
-      (String? query) async => _podcastService.search(
-        searchQuery: query,
-        limit: 20,
-        country: CountryX.platformDefault,
-      ),
-      initialValue: SearchResult(items: []),
-    );
-
-    // Subscription doesn't need disposal - manager lives for app lifetime
-    searchManager.textChangedCommand
-        .debounce(const Duration(milliseconds: 500))
-        .listen((filterText, sub) => updateSearchCommand.run(filterText));
-
-    podcastsCommand = Command.createSync(
-      (filterText) =>
-          podcastLibraryService.getFilteredPodcastsWithMetadata(filterText),
-      initialValue: [],
-    );
-
-    collectionManager.textChangedCommand.listen(
-      (filterText, sub) => podcastsCommand.run(filterText),
-    );
-
-    fetchEpisodeMediaCommand = Command.createAsync<Item, List<EpisodeMedia>>(
-      (podcast) => _podcastService.findEpisodes(item: podcast),
-      initialValue: [],
-    );
-
-    podcastsCommand.run(null);
-
-    updateSearchCommand.run(null);
-  }
+       _podcastLibraryService = podcastLibraryService,
+       _searchController = searchController,
+       _collectionController = collectionController;
 
   final PodcastService _podcastService;
   final PodcastLibraryService _podcastLibraryService;
-  late Command<String?, SearchResult> updateSearchCommand;
-  late Command<Item, List<EpisodeMedia>> fetchEpisodeMediaCommand;
-  late Command<String?, List<PodcastMetadata>> podcastsCommand;
+  final SearchTextController _searchController;
+  final CollectionController _collectionController;
+
+  late final results = B.future(() {
+    final query = _searchController.searchTextDebounced.value;
+    return _podcastService.search(
+      searchQuery: query.text,
+      limit: 20,
+      country: CountryX.platformDefault,
+    );
+  });
+
+  late final _libraryModified = B.writable(false);
+
+  late final podcasts = B.derived(() {
+    final filterText = _collectionController.searchText.value;
+    _libraryModified.value; // allow manual refresh
+    return _podcastLibraryService.getFilteredPodcastsWithMetadata(
+      filterText.text,
+    );
+  });
+
+  late final subscriptions = B.family((Item podcastItem) {
+    return B.derived(() {
+      return podcasts.value.any((p) => p.feedUrl == podcastItem.feedUrl);
+    });
+  });
+
+  late final episodeMedias = B.family((Item podcastItem) {
+    return B.future(() => _podcastService.findEpisodes(item: podcastItem));
+  });
 
   Future<void> addPodcast(PodcastMetadata metadata) async {
     await _podcastLibraryService.addPodcast(metadata);
-    podcastsCommand.run();
+    _libraryModified.toggle();
   }
 
   Future<void> removePodcast({required String feedUrl}) async {
     await _podcastLibraryService.removePodcast(feedUrl);
-    podcastsCommand.run();
+    _libraryModified.toggle();
   }
 }

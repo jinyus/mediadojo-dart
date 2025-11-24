@@ -1,3 +1,5 @@
+import 'package:state_beacon/state_beacon.dart';
+
 import '../../register_dependencies.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_it/flutter_it.dart';
@@ -13,7 +15,7 @@ class SearchView extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final searchType = watch(searchManagerRef().searchTypeNotifier).value;
+    final searchType = searchControllerRef().searchType.watch(context);
     return Column(
       spacing: kMediumPadding,
       children: [

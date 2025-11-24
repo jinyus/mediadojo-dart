@@ -88,7 +88,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
               ),
               DownloadButton(
                 audio: episode,
-                addPodcast: () => podcastManagerRef().addPodcast(
+                addPodcast: () => podcastControllerRef().addPodcast(
                   PodcastMetadata(
                     feedUrl: episode.feedUrl,
                     imageUrl: podcastImage,
