@@ -107,6 +107,24 @@ class PlayerManager extends BaseAudioHandler
     shouldSleep: false,
   );
 
+  late final slider = B.derived(() {
+    final durationSeconds = duration.value.inSeconds.toDouble();
+    final positionSeconds = position.value.inSeconds.toDouble();
+    final bufferSeconds = buffer.value.inSeconds.toDouble();
+
+    final sliderActive = durationSeconds > positionSeconds;
+
+    final bufferActive =
+        bufferSeconds >= 0 &&
+        bufferSeconds <= (sliderActive ? durationSeconds : 1.0);
+
+    return (
+      max: sliderActive ? durationSeconds : 1.0,
+      value: sliderActive ? positionSeconds : 0.0,
+      secondaryTrackValue: bufferActive ? bufferSeconds : null,
+    );
+  });
+
   late final duration =
       B.streamRaw(
         () => _controller.player.stream.duration,

@@ -18,17 +18,7 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
 
     final duration = controller.duration.watch(context);
 
-    final position = controller.position.watch(context);
-
-    final buffer = controller.buffer.watch(context);
-
-    // TODO: put calculations in derived beacons
-    final sliderActive = duration.inSeconds > position.inSeconds;
-
-    final bufferActive =
-        buffer.inSeconds >= 0 &&
-        buffer.inSeconds <=
-            (sliderActive ? duration.inSeconds.toDouble() : 1.0);
+    final slider = controller.slider.watch(context);
 
     const thumbShape = RoundSliderThumbShape(
       elevation: 0,
@@ -69,13 +59,11 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
               ),
               child: Slider(
                 min: 0,
-                max: sliderActive ? duration.inSeconds.toDouble() : 1.0,
-                value: sliderActive ? position.inSeconds.toDouble() : 0.0,
-                secondaryTrackValue: bufferActive
-                    ? buffer.inSeconds.toDouble()
-                    : null,
+                max: slider.max,
+                value: slider.value,
+                secondaryTrackValue: slider.secondaryTrackValue,
                 onChanged: (value) {
-                  playerManagerRef().seek(Duration(seconds: value.toInt()));
+                  controller.seek(Duration(seconds: value.toInt()));
                 },
               ),
             ),
