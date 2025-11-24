@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/safe_network_image.dart';
 import '../../common/view/theme.dart';
@@ -69,18 +70,13 @@ class PlayerRemoteSourceImage extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    final controller = playerManagerRef();
+
     final remoteSourceArtUrl = watch(
       playerManagerRef().playerViewState.select((e) => e.remoteSourceArtUrl),
     ).value;
 
-    final artUrl = watchStream(
-      (PlayerManager p) =>
-          p.currentMediaStream.map((e) => e?.artUrl ?? e?.collectionArtUrl),
-      target: playerManagerRef(),
-      initialValue:
-          playerManagerRef().currentMedia?.artUrl ??
-          playerManagerRef().currentMedia?.collectionArtUrl,
-    ).data;
+    final artUrl = controller.currentArtUrl.watch(context);
 
     final color = watch(
       playerManagerRef().playerViewState.select((e) => e.color),

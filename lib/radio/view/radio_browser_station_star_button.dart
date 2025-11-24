@@ -32,12 +32,8 @@ class RadioStationStarButton extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final currentMedia = watchStream(
-      (PlayerManager p) => p.currentMediaStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().currentMedia,
-      preserveState: false,
-    ).data;
+    final playerController = playerManagerRef();
+    final currentMedia = playerController.currentMediaBeacon.watch(context);
 
     final controller = radioControllerRef();
 

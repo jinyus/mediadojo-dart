@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:state_beacon/state_beacon.dart';
 import '../../common/view/theme.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/color_scheme_x.dart';
@@ -20,12 +21,8 @@ class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
 
   @override
   Widget build(BuildContext context) {
-    final media = watchStream(
-      (PlayerManager p) => p.currentMediaStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().currentMedia,
-      preserveState: false,
-    ).data;
+    final controller = playerManagerRef();
+    final media = controller.currentMediaBeacon.watch(context);
 
     final isFullMode = watch(
       playerManagerRef().playerViewState.select((e) => e.fullMode),

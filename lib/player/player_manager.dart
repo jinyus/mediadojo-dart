@@ -169,43 +169,49 @@ class PlayerManager extends BaseAudioHandler
 
   Playlist get playlist => _player.state.playlist;
 
-  Stream<UniqueMedia?> get currentMediaStream =>
-      _player.stream.playlist.asyncMap((playlist) async {
-        if (playlist.medias.whereType<UniqueMedia>().isEmpty) return null;
-        final media = playlist.medias
-            .whereType<UniqueMedia>()
-            .toList()[playlist.index];
+  UniqueMedia? get currentMedia => _player.state.playlist.medias
+      .whereType<UniqueMedia>()
+      .toList()
+      .elementAtOrNull(_player.state.playlist.index);
 
-        final Uri? artUri;
-        if (playerViewState.value.remoteSourceArtUrl != null) {
-          artUri = Uri.tryParse(playerViewState.value.remoteSourceArtUrl!);
-        } else {
-          artUri = await media.artUri;
-        }
+  late final currentMediaBeacon = _player.stream.playlist.asyncMap((
+    playlist,
+  ) async {
+    final media = playlist.medias
+        .whereType<UniqueMedia>()
+        .toList()
+        .elementAtOrNull(playlist.index);
 
-        mediaItem.add(
-          MediaItem(
-            id: media.id,
-            title: media.title ?? media.id.toString(),
-            artist: media.artist,
-            album: media.collectionName,
-            duration: media.duration ?? duration.value,
-            artUri: artUri,
-          ),
-        );
+    if (media == null) return null;
 
-        await _setLocalColor(media);
+    final Uri? artUri;
+    if (playerViewState.value.remoteSourceArtUrl != null) {
+      artUri = Uri.tryParse(playerViewState.value.remoteSourceArtUrl!);
+    } else {
+      artUri = await media.artUri;
+    }
 
-        return media;
-      });
+    mediaItem.add(
+      MediaItem(
+        id: media.id,
+        title: media.title ?? media.id.toString(),
+        artist: media.artist,
+        album: media.collectionName,
+        duration: media.duration ?? duration.value,
+        artUri: artUri,
+      ),
+    );
 
-  UniqueMedia? get currentMedia =>
-      _player.state.playlist.medias.whereType<UniqueMedia>().isEmpty
-      ? null
-      : _player.state.playlist.medias
-                .whereType<UniqueMedia>()
-                .toList()[_player.state.playlist.index]
-            as UniqueMedia?;
+    await _setLocalColor(media);
+
+    return media;
+  }).toRawBeacon();
+
+  late final currentArtUrl = B.derived(() {
+    final media = currentMediaBeacon.value;
+
+    return media?.artUrl ?? media?.collectionArtUrl;
+  });
 
   PlaylistMode get playlistMode => _player.state.playlistMode;
 

@@ -42,23 +42,21 @@ class RadioBrowserTile extends StatelessWidget with WatchItMixin {
   final StationMedia media;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-    title: Text(media.title),
-    selectedColor: context.theme.colorScheme.primary,
-    selected:
-        watchStream(
-          (PlayerManager p) =>
-              p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
-          target: playerManagerRef(),
-          initialValue: playerManagerRef().currentMedia?.id == media.id,
-          preserveState: false,
-          allowStreamChange: true,
-        ).data ??
-        false,
-    minLeadingWidth: kDefaultTileLeadingDimension,
-    leading: RemoteMediaListTileImage(media: media),
-    subtitle: Text(media.genres.take(5).toList().join(', ')),
-    onTap: () => playerManagerRef().setPlaylist([media]),
-    trailing: RadioBrowserStationStarButton(media: media),
-  );
+  Widget build(BuildContext context) {
+    final playerController = playerManagerRef();
+    final currentMedia = playerController.currentMediaBeacon.watch(context);
+
+    final isCurrentMedia = currentMedia?.id == media.id;
+
+    return ListTile(
+      title: Text(media.title),
+      selectedColor: context.theme.colorScheme.primary,
+      selected: isCurrentMedia,
+      minLeadingWidth: kDefaultTileLeadingDimension,
+      leading: RemoteMediaListTileImage(media: media),
+      subtitle: Text(media.genres.take(5).toList().join(', ')),
+      onTap: () => playerController.setPlaylist([media]),
+      trailing: RadioBrowserStationStarButton(media: media),
+    );
+  }
 }

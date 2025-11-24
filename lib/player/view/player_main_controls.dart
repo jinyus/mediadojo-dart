@@ -118,7 +118,7 @@ class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
         isPlaying == true ? Icons.pause : Icons.play_arrow,
         color: iconColor,
       ),
-      onPressed: playerManagerRef().playOrPause,
+      onPressed: controller.playOrPause,
     );
   }
 }

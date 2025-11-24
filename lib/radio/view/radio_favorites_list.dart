@@ -53,16 +53,10 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isCurrentlyPlaying =
-        watchStream(
-          (PlayerManager p) =>
-              p.currentMediaStream.map((e) => e?.id == media.id).distinct(),
-          target: playerManagerRef(),
-          initialValue: playerManagerRef().currentMedia?.id == media.id,
-          preserveState: false,
-          allowStreamChange: true,
-        ).data ??
-        false;
+    final playerController = playerManagerRef();
+    final currentMedia = playerController.currentMediaBeacon.watch(context);
+
+    final isCurrentMedia = currentMedia?.id == media.id;
 
     return ListTile(
       title: Text(media.title),
@@ -70,7 +64,7 @@ class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
       minLeadingWidth: kDefaultTileLeadingDimension,
       leading: RemoteMediaListTileImage(media: media),
       trailing: RadioBrowserStationStarButton(media: media),
-      selected: isCurrentlyPlaying,
+      selected: isCurrentMedia,
       selectedColor: context.colorScheme.primary,
       onTap: () => playerManagerRef().setPlaylist([media]),
     );

@@ -34,11 +34,7 @@ class EpisodeTile extends StatelessWidget with WatchItMixin {
 
     final theme = context.theme;
 
-    final currentMedia = watchStream(
-      (PlayerManager m) => m.currentMediaStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().currentMedia,
-    ).data;
+    final currentMedia = controller.currentMediaBeacon.watch(context);
 
     final selected = currentMedia?.id == episode.id;
 

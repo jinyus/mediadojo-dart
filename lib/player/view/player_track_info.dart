@@ -29,12 +29,8 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final media = watchStream(
-      (PlayerManager p) => p.currentMediaStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().currentMedia,
-      preserveState: false,
-    ).data;
+    final controller = playerManagerRef();
+    final media = controller.currentMediaBeacon.watch(context);
 
     if (media == null) {
       return const SizedBox.shrink();

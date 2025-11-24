@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:state_beacon/state_beacon.dart';
 import 'package:yaru/yaru.dart';
 
 import '../../common/view/theme.dart';
@@ -20,6 +21,8 @@ class PlayerFullView extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    final controller = playerManagerRef();
+
     final showPlayerExplorer = watch(
       playerManagerRef().playerViewState.select((e) => e.showPlayerExplorer),
     ).value;
@@ -33,12 +36,7 @@ class PlayerFullView extends StatelessWidget
         ).data ??
         false;
 
-    final media = watchStream(
-      (PlayerManager p) => p.currentMediaStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().currentMedia,
-      preserveState: false,
-    ).data;
+    final media = controller.currentMediaBeacon.watch(context);
 
     final color =
         watch(
