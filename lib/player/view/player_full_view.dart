@@ -27,14 +27,7 @@ class PlayerFullView extends StatelessWidget
       playerManagerRef().playerViewState.select((e) => e.showPlayerExplorer),
     ).value;
 
-    final isVideo =
-        watchStream(
-          (PlayerManager p) => p.isVideoStream,
-          target: playerManagerRef(),
-          initialValue: playerManagerRef().isVideo,
-          preserveState: false,
-        ).data ??
-        false;
+    final isVideo = controller.isVideo.watch(context);
 
     final media = controller.currentMedia.watch(context);
 

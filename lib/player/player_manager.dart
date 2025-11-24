@@ -226,15 +226,13 @@ class PlayerManager extends BaseAudioHandler
     setPlaylist(medias);
   }
 
-  Stream<bool> get isVideoStream => _player.stream.tracks.map(
-    (tracks) =>
-        tracks.video.isNotEmpty &&
-        tracks.video.any((e) => e.fps != null && e.fps! > 1),
-  );
-
-  bool get isVideo =>
-      _player.state.tracks.video.isNotEmpty &&
-      _player.state.tracks.video.any((e) => e.fps != null && e.fps! > 1);
+  late final isVideo = _player.stream.tracks
+      .map(
+        (tracks) =>
+            tracks.video.isNotEmpty &&
+            tracks.video.any((e) => e.fps != null && e.fps! > 1),
+      )
+      .toRawBeacon(shouldSleep: false, initialValue: false);
 
   Future<void> setPlaylist(
     List<UniqueMedia> mediaList, {
