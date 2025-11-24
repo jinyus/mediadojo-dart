@@ -19,7 +19,7 @@ import 'podcasts/podcast_library_service.dart';
 import 'podcasts/podcast_manager.dart';
 import 'podcasts/podcast_service.dart';
 import 'radio/radio_library_service.dart';
-import 'radio/radio_manager.dart';
+import 'radio/radio_controllerdart';
 import 'radio/radio_service.dart';
 import 'search/search_manager.dart';
 import 'settings/settings_manager.dart';
@@ -53,8 +53,6 @@ final podcastServiceRef = Ref.singleton(
     settingsService: settingServiceRef(),
   ),
 );
-
-final searchManagerRef = Ref.singleton(SearchManager.new);
 
 final collectionManagerRef = Ref.singleton(CollectionManager.new);
 
@@ -103,12 +101,12 @@ final radioServiceRef = Ref.singleton(
   ),
 );
 
-final radioManagerRef = Ref.singleton(
-  () => RadioManager(
+final radioControllerRef = Ref.singleton(
+  () => RadioController(
     radioLibraryService: radioLibraryServiceRef(),
     radioService: radioServiceRef(),
-    searchManager: searchManagerRef(),
-    collectionManager: collectionManagerRef(),
+    searchController: searchControllerRef(),
+    collectionController: collectionControllerRef(),
   ),
 );
 

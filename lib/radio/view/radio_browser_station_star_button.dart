@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 import 'package:yaru/yaru.dart';
 
 import '../../player/data/unique_media.dart';
 import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
 
-class RadioBrowserStationStarButton extends StatelessWidget with WatchItMixin {
+class RadioBrowserStationStarButton extends StatelessWidget {
   const RadioBrowserStationStarButton({super.key, required this.media});
 
   final UniqueMedia media;
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = watch(
-      radioManagerRef().favoriteStationsCommand.select(
-        (favorites) => favorites.any((m) => m.id == media.id),
-      ),
-    ).value;
+    final controller = radioControllerRef();
+
+    final isFavorite = controller.isFavorite(media.id).watch(context);
+
     return IconButton(
       onPressed: () => isFavorite
-          ? radioManagerRef().removeFavoriteStation(media.id)
-          : radioManagerRef().addFavoriteStation(media.id),
+          ? controller.removeFavoriteStation(media.id)
+          : controller.addFavoriteStation(media.id),
       icon: Icon(isFavorite ? YaruIcons.star_filled : YaruIcons.star),
     );
   }
@@ -38,17 +38,21 @@ class RadioStationStarButton extends StatelessWidget with WatchItMixin {
       initialValue: playerManagerRef().currentMedia,
       preserveState: false,
     ).data;
-    final isFavorite = watch(
-      radioManagerRef().favoriteStationsCommand.select(
-        (favorites) => favorites.any((m) => m.id == currentMedia?.id),
-      ),
-    ).value;
+
+    final controller = radioControllerRef();
+
+    final mediaID = currentMedia?.id;
+
+    final isFavorite = mediaID == null
+        ? false
+        : controller.isFavorite(mediaID).watch(context);
+
     return IconButton(
       onPressed: currentMedia == null
           ? null
           : () => isFavorite
-                ? radioManagerRef().removeFavoriteStation(currentMedia.id)
-                : radioManagerRef().addFavoriteStation(currentMedia.id),
+                ? controller.removeFavoriteStation(currentMedia.id)
+                : controller.addFavoriteStation(currentMedia.id),
       icon: Icon(isFavorite ? YaruIcons.star_filled : YaruIcons.star),
     );
   }
