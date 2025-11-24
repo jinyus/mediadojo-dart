@@ -174,38 +174,34 @@ class PlayerManager extends BaseAudioHandler
       .toList()
       .elementAtOrNull(_player.state.playlist.index);
 
-  late final currentMediaBeacon = _player.stream.playlist.asyncMap((
-    playlist,
-  ) async {
-    final media = playlist.medias
-        .whereType<UniqueMedia>()
-        .toList()
-        .elementAtOrNull(playlist.index);
+  late final currentMediaBeacon =
+      _player.stream.playlist.map((playlist) {
+        return playlist.medias
+            .whereType<UniqueMedia>()
+            .toList()
+            .elementAtOrNull(playlist.index);
+      }).toRawBeacon()..subscribe((media) async {
+        if (media == null) return;
+        final Uri? artUri;
+        if (playerViewState.value.remoteSourceArtUrl != null) {
+          artUri = Uri.tryParse(playerViewState.value.remoteSourceArtUrl!);
+        } else {
+          artUri = await media.artUri;
+        }
 
-    if (media == null) return null;
+        mediaItem.add(
+          MediaItem(
+            id: media.id,
+            title: media.title ?? media.id.toString(),
+            artist: media.artist,
+            album: media.collectionName,
+            duration: media.duration ?? duration.value,
+            artUri: artUri,
+          ),
+        );
 
-    final Uri? artUri;
-    if (playerViewState.value.remoteSourceArtUrl != null) {
-      artUri = Uri.tryParse(playerViewState.value.remoteSourceArtUrl!);
-    } else {
-      artUri = await media.artUri;
-    }
-
-    mediaItem.add(
-      MediaItem(
-        id: media.id,
-        title: media.title ?? media.id.toString(),
-        artist: media.artist,
-        album: media.collectionName,
-        duration: media.duration ?? duration.value,
-        artUri: artUri,
-      ),
-    );
-
-    await _setLocalColor(media);
-
-    return media;
-  }).toRawBeacon();
+        await _setLocalColor(media);
+      });
 
   late final currentArtUrl = B.derived(() {
     final media = currentMediaBeacon.value;
