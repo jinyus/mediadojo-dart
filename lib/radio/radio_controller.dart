@@ -1,4 +1,3 @@
-import 'package:flutter_it/flutter_it.dart';
 import 'package:state_beacon/state_beacon.dart';
 
 import '../collection/collection_controller.dart';
