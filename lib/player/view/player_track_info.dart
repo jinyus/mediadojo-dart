@@ -115,7 +115,7 @@ class PlayerTrackProgressTimeText extends StatelessWidget with WatchItMixin {
     final textTheme = context.textTheme;
     final controller = playerManagerRef();
 
-    final duration = watch(playerManagerRef().duration).value;
+    final duration = controller.duration.watch(context);
 
     final position = controller.position.watch(context);
 

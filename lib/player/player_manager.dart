@@ -32,10 +32,6 @@ class PlayerManager extends BaseAudioHandler
         ],
       ),
     );
-    _durationSubscription = controller.player.stream.duration.listen(
-      _setDuration,
-    );
-    _bufferedSubscription = controller.player.stream.buffer.listen(_setBuffer);
   }
 
   final VideoController _controller;
@@ -105,24 +101,22 @@ class PlayerManager extends BaseAudioHandler
         playbackState.add(playbackState.value.copyWith(updatePosition: pos));
       }, startNow: false);
 
-  StreamSubscription<Duration>? _bufferedSubscription;
-  final _buffer = ValueNotifier(Duration.zero);
-  ValueNotifier<Duration> get buffer => _buffer;
-  void _setBuffer(Duration value) {
-    if (value.inSeconds == _buffer.value.inSeconds) return;
-    _buffer.value = value;
-  }
+  late final buffer = B.streamRaw(
+    () => _controller.player.stream.buffer,
+    initialValue: Duration.zero,
+    shouldSleep: false,
+  );
 
-  StreamSubscription<Duration>? _durationSubscription;
-  final _duration = ValueNotifier<Duration>(Duration.zero);
-  ValueNotifier<Duration> get duration => _duration;
-  void _setDuration(Duration d) {
-    if (mediaItem.value != null) {
-      mediaItem.add(mediaItem.value!.copyWith(duration: d));
-    }
-    if (d.inSeconds == _duration.value.inSeconds) return;
-    _duration.value = d;
-  }
+  late final duration =
+      B.streamRaw(
+        () => _controller.player.stream.duration,
+        initialValue: Duration.zero,
+        shouldSleep: false,
+      )..subscribe((dur) {
+        if (mediaItem.value != null) {
+          mediaItem.add(mediaItem.value!.copyWith(duration: dur));
+        }
+      }, startNow: false);
 
   Stream<bool> get isPlayingStream => _player.stream.playing.map((e) {
     playbackState.add(
@@ -302,8 +296,6 @@ class PlayerManager extends BaseAudioHandler
 
   @override
   Future<void> dispose() async {
-    await _durationSubscription?.cancel();
-    await _bufferedSubscription?.cancel();
     await _player.dispose();
   }
 

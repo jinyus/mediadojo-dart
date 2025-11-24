@@ -16,12 +16,13 @@ class PlayerTrack extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final controller = playerManagerRef();
 
-    final duration = watch(playerManagerRef().duration).value;
+    final duration = controller.duration.watch(context);
 
     final position = controller.position.watch(context);
 
-    final buffer = watch(playerManagerRef().buffer).value;
+    final buffer = controller.buffer.watch(context);
 
+    // TODO: put calculations in derived beacons
     final sliderActive = duration.inSeconds > position.inSeconds;
 
     final bufferActive =
