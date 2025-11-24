@@ -1,6 +1,6 @@
 import 'package:flutter_it/flutter_it.dart';
 
-import '../collection/collection_manager.dart';
+import '../collection/collection_controller.dart';
 import '../player/data/station_media.dart';
 import '../register_dependencies.dart';
 import '../search/search_manager.dart';

@@ -8,7 +8,7 @@ import 'package:state_beacon/state_beacon.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app/app_config.dart';
-import 'collection/collection_manager.dart';
+import 'collection/collection_controller.dart';
 import 'common/extenal_path_service.dart';
 import 'common/platforms.dart';
 import 'notifications/notifications_service.dart';
