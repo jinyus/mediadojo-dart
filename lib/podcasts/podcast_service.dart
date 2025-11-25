@@ -52,7 +52,7 @@ class PodcastService {
   }) async {
     SearchResult res;
     try {
-      if (searchQuery == null || searchQuery.isEmpty == true) {
+      if (searchQuery == null || searchQuery.isEmpty) {
         res = await _search.charts(
           genre: podcastGenre == PodcastGenre.all ? '' : podcastGenre.id,
           limit: limit,
