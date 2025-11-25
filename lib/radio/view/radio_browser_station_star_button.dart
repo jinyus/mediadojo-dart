@@ -4,7 +4,6 @@ import 'package:state_beacon/state_beacon.dart';
 import 'package:yaru/yaru.dart';
 
 import '../../player/data/unique_media.dart';
-import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
 
 class RadioBrowserStationStarButton extends StatelessWidget {

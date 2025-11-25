@@ -5,7 +5,6 @@ import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/ui_constants.dart';
 import '../../register_dependencies.dart';
-import '../player_manager.dart';
 
 class PlayerMainControls extends StatelessWidget {
   const PlayerMainControls({

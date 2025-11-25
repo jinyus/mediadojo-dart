@@ -1,11 +1,8 @@
-import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 import 'package:state_beacon/state_beacon.dart';
 
 import '../collection/collection_controller.dart';
-import '../common/logging.dart';
 import '../extensions/country_x.dart';
-import '../player/data/episode_media.dart';
 import '../search/search_manager.dart';
 import 'data/podcast_metadata.dart';
 import 'podcast_library_service.dart';

@@ -8,7 +8,6 @@ import 'package:flutter_it/flutter_it.dart';
 
 import '../../common/view/ui_constants.dart';
 import '../../register_dependencies.dart';
-import '../player_manager.dart';
 import 'player_bottom_album_art.dart';
 import 'player_control_mixin.dart';
 import 'player_main_controls.dart';

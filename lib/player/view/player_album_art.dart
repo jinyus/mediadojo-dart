@@ -9,7 +9,6 @@ import '../../extensions/build_context_x.dart';
 import '../../register_dependencies.dart';
 import '../data/local_media.dart';
 import '../data/unique_media.dart';
-import '../player_manager.dart';
 
 class PlayerAlbumArt extends StatelessWidget {
   const PlayerAlbumArt({

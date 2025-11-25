@@ -7,7 +7,6 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/color_x.dart';
 import '../../register_dependencies.dart';
-import '../player_manager.dart';
 
 class PlayerTrack extends StatelessWidget with WatchItMixin {
   const PlayerTrack({super.key});

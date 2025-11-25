@@ -9,7 +9,6 @@ import '../../radio/view/radio_browser_station_star_button.dart';
 import '../../register_dependencies.dart';
 import '../../search/copy_to_clipboard_content.dart';
 import '../data/station_media.dart';
-import '../player_manager.dart';
 
 class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
   const PlayerTrackInfo({

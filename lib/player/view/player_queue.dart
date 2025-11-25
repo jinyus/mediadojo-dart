@@ -7,7 +7,6 @@ import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../extensions/string_x.dart';
 import '../../register_dependencies.dart';
-import '../player_manager.dart';
 
 class PlayerQueue extends StatefulWidget with WatchItStatefulWidgetMixin {
   const PlayerQueue({super.key});
@@ -38,7 +37,7 @@ class _PlayerQueueState extends State<PlayerQueue> {
       padding: const EdgeInsets.all(kBigPadding),
       child: Column(
         spacing: kBigPadding,
-        children: medias == null || medias.isEmpty
+        children: medias.isEmpty
             ? []
             : [
                 Text(

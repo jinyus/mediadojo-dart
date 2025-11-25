@@ -9,7 +9,6 @@ import '../../extensions/date_time_x.dart';
 import '../../extensions/duration_x.dart';
 import '../../extensions/string_x.dart';
 import '../../player/data/episode_media.dart';
-import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
 import '../data/podcast_metadata.dart';
 import 'download_button.dart';

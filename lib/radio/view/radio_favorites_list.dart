@@ -5,7 +5,6 @@ import 'package:state_beacon/state_beacon.dart';
 import '../../common/view/ui_constants.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/station_media.dart';
-import '../../player/player_manager.dart';
 import '../../register_dependencies.dart';
 import 'radio_browser_station_star_button.dart';
 import 'radio_host_not_connected_content.dart';
