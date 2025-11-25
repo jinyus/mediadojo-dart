@@ -89,8 +89,7 @@ class PlayerManager extends BaseAudioHandler
     }
   }
 
-  Player get _player => _controller.player;
-  Player get player => _player;
+  Player get player => _controller.player;
 
   late final position =
       B.streamRaw(
@@ -137,40 +136,41 @@ class PlayerManager extends BaseAudioHandler
       }, startNow: false);
 
   late final isPlaying =
-      _player.stream.playing.toRawBeacon(
-        shouldSleep: false,
-        initialValue: false,
-      )..subscribe((val) {
-        playbackState.add(
-          playbackState.value.copyWith(
-            playing: val,
-            controls: [
-              MediaControl.skipToPrevious,
-              val ? MediaControl.pause : MediaControl.play,
+      player.stream.playing.toRawBeacon(shouldSleep: false, initialValue: false)
+        ..subscribe((val) {
+          playbackState.add(
+            playbackState.value.copyWith(
+              playing: val,
+              controls: [
+                MediaControl.skipToPrevious,
+                val ? MediaControl.pause : MediaControl.play,
 
-              MediaControl.skipToNext,
-            ],
-            processingState: AudioProcessingState.ready,
-          ),
-        );
-      });
+                MediaControl.skipToNext,
+              ],
+              processingState: AudioProcessingState.ready,
+            ),
+          );
+        });
 
-  Stream<Playlist> get _playlistStream => _player.stream.playlist;
+  Stream<Playlist> get _playlistStream => player.stream.playlist;
 
-  Stream<int> get playlistIndexStream => _playlistStream.map((e) => e.index);
+  late final playlistIndexStream = _playlistStream
+      .map((e) => e.index)
+      .toRawBeacon(shouldSleep: false, initialValue: playlistIndex);
 
   Stream<List<UniqueMedia>> get mediasStream =>
       _playlistStream.map((e) => e.medias.whereType<UniqueMedia>().toList());
 
-  List<UniqueMedia> get medias =>
-      playlist.medias.whereType<UniqueMedia>().toList();
+  late final medias = _playlistStream
+      .map((e) => e.medias.whereType<UniqueMedia>().toList())
+      .toRawBeacon(shouldSleep: false, initialValue: []);
 
-  int get playlistIndex => _player.state.playlist.index;
+  int get playlistIndex => player.state.playlist.index;
 
-  Playlist get playlist => _player.state.playlist;
+  Playlist get playlist => player.state.playlist;
 
   late final currentMedia =
-      _player.stream.playlist.map((playlist) {
+      player.stream.playlist.map((playlist) {
         return playlist.medias
             .whereType<UniqueMedia>()
             .toList()
@@ -204,11 +204,12 @@ class PlayerManager extends BaseAudioHandler
     return media?.artUrl ?? media?.collectionArtUrl;
   });
 
-  PlaylistMode get playlistMode => _player.state.playlistMode;
+  PlaylistMode get playlistMode => player.state.playlistMode;
 
-  Stream<PlaylistMode> get playlistModeStream => _player.stream.playlistMode;
+  Stream<PlaylistMode> get playlistModeStream => player.stream.playlistMode;
 
-  final shuffle = ValueNotifier<bool>(false);
+  late final shuffle = B.writable(false);
+
   var _oldPlaylistMedias = <UniqueMedia>[];
   void toggleShuffle() {
     shuffle.value = !shuffle.value;
@@ -226,7 +227,7 @@ class PlayerManager extends BaseAudioHandler
     setPlaylist(medias);
   }
 
-  late final isVideo = _player.stream.tracks
+  late final isVideo = player.stream.tracks
       .map(
         (tracks) =>
             tracks.video.isNotEmpty &&
@@ -241,42 +242,42 @@ class PlayerManager extends BaseAudioHandler
   }) async {
     if (mediaList.isEmpty) return;
     updateState(resetRemoteSource: true);
-    await _player.open(Playlist(mediaList, index: index), play: play);
+    await player.open(Playlist(mediaList, index: index), play: play);
   }
 
-  Future<void> addToPlaylist(UniqueMedia media) async => _player.add(media);
+  Future<void> addToPlaylist(UniqueMedia media) async => player.add(media);
 
   Future<void> removeFromPlaylist(int index) async {
     if (playlist.medias.length < 2) return;
-    await _player.remove(index);
+    await player.remove(index);
   }
 
-  Future<void> jump(int index) => _player.jump(index);
+  Future<void> jump(int index) => player.jump(index);
 
-  Future<void> move(int from, int to) => _player.move(from, to);
-
-  @override
-  Future<void> play() async => _player.play();
+  Future<void> move(int from, int to) => player.move(from, to);
 
   @override
-  Future<void> pause() async => _player.pause();
-
-  Future<void> playOrPause() => _player.playOrPause();
+  Future<void> play() async => player.play();
 
   @override
-  Future<void> stop() async => _player.stop();
+  Future<void> pause() async => player.pause();
+
+  Future<void> playOrPause() => player.playOrPause();
 
   @override
-  Future<void> seek(Duration position) async => _player.seek(position);
-
-  Future<void> setVolume(double volume) async => _player.setVolume(volume);
-
-  Stream<double> get volumeStream => _player.stream.volume;
-
-  double get volume => _player.state.volume;
+  Future<void> stop() async => player.stop();
 
   @override
-  Future<void> skipToNext() async => _player.next();
+  Future<void> seek(Duration position) async => player.seek(position);
+
+  Future<void> setVolume(double volume) async => player.setVolume(volume);
+
+  Stream<double> get volumeStream => player.stream.volume;
+
+  double get volume => player.state.volume;
+
+  @override
+  Future<void> skipToNext() async => player.next();
 
   bool _firstClick = true;
 
@@ -288,11 +289,11 @@ class PlayerManager extends BaseAudioHandler
       return;
     }
     _firstClick = true;
-    return _player.previous();
+    return player.previous();
   }
 
   Future<void> changePlaylistMode() async {
-    final currentMode = _player.state.playlistMode;
+    final currentMode = player.state.playlistMode;
     PlaylistMode nextMode;
     switch (currentMode) {
       case PlaylistMode.none:
@@ -306,11 +307,11 @@ class PlayerManager extends BaseAudioHandler
   }
 
   Future<void> setPlaylistMode(PlaylistMode mode) async =>
-      _player.setPlaylistMode(mode);
+      player.setPlaylistMode(mode);
 
   @override
   Future<void> dispose() async {
-    await _player.dispose();
+    await player.dispose();
   }
 
   Future<void> _setLocalColor(UniqueMedia media) async {
