@@ -37,7 +37,7 @@ class PodcastController with BeaconController {
       limit: 20,
       country: CountryX.platformDefault,
     );
-  });
+  }, shouldSleep: false);
 
   late final _libraryModified = B.writable(false);
 
