@@ -61,10 +61,6 @@ class PlayerManager extends BaseAudioHandler
     return playerViewState.value.fullMode;
   });
 
-  // late final playerViewState = ValueNotifier<PlayerViewState>(
-  //   const PlayerViewState(fullMode: false, showPlayerExplorer: true),
-  // );
-
   void updateState({
     bool? fullMode,
     bool? showPlayerExplorer,
