@@ -4,13 +4,14 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
+import 'package:state_beacon/state_beacon.dart';
 
 import '../extensions/date_time_x.dart';
 import '../player/data/episode_media.dart';
 import '../settings/settings_service.dart';
 import 'podcast_library_service.dart';
 
-class DownloadManager extends ChangeNotifier {
+class DownloadManager extends ChangeNotifier with BeaconController {
   DownloadManager({
     required PodcastLibraryService libraryService,
     required SettingsService settingsService,
@@ -25,15 +26,8 @@ class DownloadManager extends ChangeNotifier {
 
   final _values = <String, double?>{};
   final _cancelTokens = <String, CancelToken?>{};
-  final _messageStreamController = StreamController<String>.broadcast();
-  String _lastMessage = '';
-  void _addMessage(String message) {
-    if (message == _lastMessage) return;
-    _lastMessage = message;
-    _messageStreamController.add(message);
-  }
 
-  Stream<String> get messageStream => _messageStreamController.stream;
+  late final messageBeacon = B.writable('');
 
   double? getValue(String? url) => _values[url];
   void setValue({
@@ -114,7 +108,7 @@ class DownloadManager extends ChangeNotifier {
           path: path,
           feedUrl: media.feedUrl,
         );
-        _addMessage(finishedMessage);
+        messageBeacon.value = finishedMessage;
 
         _cancelTokens.containsKey(url)
             ? _cancelTokens.update(url, (value) => null)
@@ -154,26 +148,8 @@ class DownloadManager extends ChangeNotifier {
         message = canceledMessage;
       }
 
-      _addMessage(message ?? e.toString());
+      messageBeacon.value = message ?? e.toString();
       return null;
     }
-  }
-
-  @override
-  Future<void> dispose() async {
-    await _messageStreamController.close();
-    super.dispose();
-  }
-}
-
-void downloadMessageStreamHandler(
-  BuildContext context,
-  AsyncSnapshot<String?> snapshot,
-  void Function() cancel,
-) {
-  if (snapshot.hasData) {
-    ScaffoldMessenger.maybeOf(
-      context,
-    )?.showSnackBar(SnackBar(content: Text(snapshot.data!)));
   }
 }

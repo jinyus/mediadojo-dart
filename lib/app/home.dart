@@ -8,7 +8,6 @@ import '../common/view/ui_constants.dart';
 import '../extensions/build_context_x.dart';
 import '../player/view/player_full_view.dart';
 import '../player/view/player_view.dart';
-import '../podcasts/download_manager.dart';
 import '../register_dependencies.dart';
 import '../search/view/search_view.dart';
 import '../settings/view/settings_dialog.dart';
@@ -18,10 +17,13 @@ class Home extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    registerStreamHandler(
-      target: downloadManagerRef().messageStream,
-      handler: downloadMessageStreamHandler,
-    );
+    final dlController = downloadManagerRef();
+
+    dlController.messageBeacon.observe(context, (_, next) {
+      ScaffoldMessenger.maybeOf(
+        context,
+      )?.showSnackBar(SnackBar(content: Text(next)));
+    });
 
     final controller = playerManagerRef();
 
