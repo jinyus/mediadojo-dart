@@ -54,8 +54,6 @@ final podcastServiceRef = Ref.singleton(
   ),
 );
 
-final collectionManagerRef = Ref.singleton(CollectionManager.new);
-
 final searchControllerRef = Ref.singleton(SearchTextController.new);
 
 final collectionControllerRef = Ref.singleton(CollectionController.new);
