@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:state_beacon/state_beacon.dart';
 import '../../extensions/build_context_x.dart';
 import '../../player/data/episode_media.dart';
 import '../../register_dependencies.dart';
-import '../download_manager.dart';
-import '../podcast_library_service.dart';
 
 class DownloadButton extends StatelessWidget {
   const DownloadButton({

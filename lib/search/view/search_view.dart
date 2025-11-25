@@ -2,7 +2,6 @@ import 'package:state_beacon/state_beacon.dart';
 
 import '../../register_dependencies.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_it/flutter_it.dart';
 
 import '../../common/media_type.dart';
 import '../../common/view/ui_constants.dart';

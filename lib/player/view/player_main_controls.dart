@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:state_beacon/state_beacon.dart';
 

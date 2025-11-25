@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:state_beacon/state_beacon.dart';
 
