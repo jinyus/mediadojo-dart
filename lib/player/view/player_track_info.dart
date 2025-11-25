@@ -38,9 +38,7 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
 
     final textTheme = context.textTheme;
 
-    final remoteTitle = watch(
-      playerManagerRef().playerViewState.select((e) => e.remoteSourceTitle),
-    ).value;
+    final remoteTitle = controller.remoteSourceTitle.watch(context);
 
     return InkWell(
       onTap: () => ScaffoldMessenger.of(context).showSnackBar(

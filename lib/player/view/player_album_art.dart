@@ -72,15 +72,11 @@ class PlayerRemoteSourceImage extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final controller = playerManagerRef();
 
-    final remoteSourceArtUrl = watch(
-      playerManagerRef().playerViewState.select((e) => e.remoteSourceArtUrl),
-    ).value;
+    final remoteSourceArtUrl = controller.remoteSourceArtUrl.watch(context);
 
     final artUrl = controller.currentArtUrl.watch(context);
 
-    final color = watch(
-      playerManagerRef().playerViewState.select((e) => e.color),
-    ).value;
+    final color = controller.color.watch(context);
 
     final playerIconColor = color ?? getPlayerIconColor(context.theme);
 

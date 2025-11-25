@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/theme.dart';
 import '../../common/view/ui_constants.dart';
@@ -26,19 +27,11 @@ class _PlayerQueueState extends State<PlayerQueue> {
 
   @override
   Widget build(BuildContext context) {
-    final medias = watchStream(
-      (PlayerManager p) => p.mediasStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().medias,
-      preserveState: true,
-    ).data;
+    final controller = playerManagerRef();
 
-    final playlistIndex = watchStream(
-      (PlayerManager p) => p.playlistIndexStream,
-      target: playerManagerRef(),
-      initialValue: playerManagerRef().playlistIndex,
-      preserveState: true,
-    ).data;
+    final medias = controller.medias.watch(context);
+
+    final playlistIndex = controller.playlistIndexStream.watch(context);
 
     final iconColor = getPlayerIconColor(context.theme);
     return Padding(

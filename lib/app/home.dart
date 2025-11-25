@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 import 'package:yaru/yaru.dart';
 
 import '../collection/view/collection_view.dart';
@@ -22,9 +23,9 @@ class Home extends StatelessWidget with WatchItMixin {
       handler: downloadMessageStreamHandler,
     );
 
-    final playerFullWindowMode = watch(
-      playerManagerRef().playerViewState.select((e) => e.fullMode),
-    ).value;
+    final controller = playerManagerRef();
+
+    final playerFullWindowMode = controller.fullMode.watch(context);
 
     if (playerFullWindowMode) return const PlayerFullView();
 

@@ -37,9 +37,33 @@ class PlayerManager extends BaseAudioHandler
   final VideoController _controller;
   VideoController get videoController => _controller;
 
-  final playerViewState = ValueNotifier<PlayerViewState>(
+  late final playerViewState = B.writable(
     const PlayerViewState(fullMode: false, showPlayerExplorer: true),
   );
+
+  late final remoteSourceArtUrl = B.derived(() {
+    return playerViewState.value.remoteSourceArtUrl;
+  });
+
+  late final color = B.derived(() {
+    return playerViewState.value.color;
+  });
+
+  late final showPlayerExplorer = B.derived(() {
+    return playerViewState.value.showPlayerExplorer;
+  });
+
+  late final remoteSourceTitle = B.derived(() {
+    return playerViewState.value.remoteSourceTitle;
+  });
+
+  late final fullMode = B.derived(() {
+    return playerViewState.value.fullMode;
+  });
+
+  // late final playerViewState = ValueNotifier<PlayerViewState>(
+  //   const PlayerViewState(fullMode: false, showPlayerExplorer: true),
+  // );
 
   void updateState({
     bool? fullMode,
@@ -158,9 +182,6 @@ class PlayerManager extends BaseAudioHandler
       .map((e) => e.index)
       .toRawBeacon(shouldSleep: false, initialValue: playlistIndex);
 
-  Stream<List<UniqueMedia>> get mediasStream =>
-      _playlistStream.map((e) => e.medias.whereType<UniqueMedia>().toList());
-
   late final medias = _playlistStream
       .map((e) => e.medias.whereType<UniqueMedia>().toList())
       .toRawBeacon(shouldSleep: false, initialValue: []);
@@ -204,9 +225,10 @@ class PlayerManager extends BaseAudioHandler
     return media?.artUrl ?? media?.collectionArtUrl;
   });
 
-  PlaylistMode get playlistMode => player.state.playlistMode;
-
-  Stream<PlaylistMode> get playlistModeStream => player.stream.playlistMode;
+  late final playlistMode = player.stream.playlistMode.toRawBeacon(
+    shouldSleep: false,
+    initialValue: player.state.playlistMode,
+  );
 
   late final shuffle = B.writable(false);
 
@@ -312,6 +334,7 @@ class PlayerManager extends BaseAudioHandler
   @override
   Future<void> dispose() async {
     await player.dispose();
+    super.dispose();
   }
 
   Future<void> _setLocalColor(UniqueMedia media) async {

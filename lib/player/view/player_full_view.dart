@@ -23,19 +23,14 @@ class PlayerFullView extends StatelessWidget
   Widget build(BuildContext context) {
     final controller = playerManagerRef();
 
-    final showPlayerExplorer = watch(
-      playerManagerRef().playerViewState.select((e) => e.showPlayerExplorer),
-    ).value;
+    final showPlayerExplorer = controller.showPlayerExplorer.watch(context);
 
     final isVideo = controller.isVideo.watch(context);
 
     final media = controller.currentMedia.watch(context);
 
     final color =
-        watch(
-          playerManagerRef().playerViewState.select((e) => e.color),
-        ).value ??
-        context.colorScheme.primary;
+        controller.color.watch(context) ?? context.colorScheme.primary;
 
     final isPortrait = !context.showSideBar;
 

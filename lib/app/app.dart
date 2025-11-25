@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_it/flutter_it.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../extensions/color_x.dart';
 import '../l10n/app_localizations.dart';
@@ -25,9 +26,9 @@ class App extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final playerColor = watch(
-      playerManagerRef().playerViewState.select((e) => e.color),
-    ).value;
+    final controller = playerManagerRef();
+    final playerColor = controller.color.watch(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
