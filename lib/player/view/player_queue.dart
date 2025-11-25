@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:state_beacon/state_beacon.dart';
 
 import '../../common/view/theme.dart';
@@ -8,7 +7,7 @@ import '../../extensions/build_context_x.dart';
 import '../../extensions/string_x.dart';
 import '../../register_dependencies.dart';
 
-class PlayerQueue extends StatefulWidget with WatchItStatefulWidgetMixin {
+class PlayerQueue extends StatefulWidget {
   const PlayerQueue({super.key});
 
   @override

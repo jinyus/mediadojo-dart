@@ -1,7 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_it/flutter_it.dart';
 import 'package:podcast_search/podcast_search.dart';
 import 'package:yaru/widgets.dart';
 
@@ -17,7 +16,7 @@ import '../data/podcast_genre.dart';
 import 'podcast_favorite_button.dart';
 import 'podcast_page_episode_list.dart';
 
-class PodcastPage extends StatefulWidget with WatchItStatefulWidgetMixin {
+class PodcastPage extends StatefulWidget {
   const PodcastPage({super.key, required this.podcastItem});
 
   final Item podcastItem;
