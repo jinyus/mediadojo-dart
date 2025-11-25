@@ -3,7 +3,7 @@ import 'package:state_beacon/state_beacon.dart';
 
 import '../collection/collection_controller.dart';
 import '../extensions/country_x.dart';
-import '../search/search_manager.dart';
+import '../search/search_controller.dart';
 import 'data/podcast_metadata.dart';
 import 'podcast_library_service.dart';
 import 'podcast_service.dart';

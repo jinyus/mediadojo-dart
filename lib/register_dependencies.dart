@@ -16,13 +16,13 @@ import 'online_art/online_art_service.dart';
 import 'player/player_manager.dart';
 import 'podcasts/download_manager.dart';
 import 'podcasts/podcast_library_service.dart';
-import 'podcasts/podcast_manager.dart';
+import 'podcasts/podcast_controller.dart';
 import 'podcasts/podcast_service.dart';
 import 'radio/radio_library_service.dart';
 import 'radio/radio_controller.dart';
 import 'radio/radio_service.dart';
-import 'search/search_manager.dart';
-import 'settings/settings_manager.dart';
+import 'search/search_controller.dart';
+import 'settings/settings_controller.dart';
 import 'settings/settings_service.dart';
 
 final dioRef = Ref.singleton(Dio.new);

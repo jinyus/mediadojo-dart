@@ -2,7 +2,7 @@ import 'package:state_beacon/state_beacon.dart';
 
 import '../collection/collection_controller.dart';
 import '../player/data/station_media.dart';
-import '../search/search_manager.dart';
+import '../search/search_controller.dart';
 import 'radio_library_service.dart';
 import 'radio_service.dart';
 
