@@ -8,7 +8,7 @@ import '../../extensions/build_context_x.dart';
 import '../../extensions/color_x.dart';
 import '../../register_dependencies.dart';
 
-class PlayerTrack extends StatelessWidget with WatchItMixin {
+class PlayerTrack extends StatelessWidget {
   const PlayerTrack({super.key});
 
   @override

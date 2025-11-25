@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:state_beacon/state_beacon.dart';
 
 import '../extensions/date_time_x.dart';
 import '../extensions/shared_preferences_x.dart';
 import 'data/podcast_metadata.dart';
 
-class PodcastLibraryService {
+class PodcastLibraryService with BeaconController {
   PodcastLibraryService({required SharedPreferences sharedPreferences})
     : _sharedPreferences = sharedPreferences;
   int? get podcastUpdatesLength => _podcastUpdates?.length;
@@ -16,10 +17,13 @@ class PodcastLibraryService {
 
   // This stream is currently used for downloads
   // TODO: replace with download commmand in DownloadManager
-  final _propertiesChangedController = StreamController<bool>.broadcast();
-  Stream<bool> get propertiesChanged => _propertiesChangedController.stream;
-  Future<void> notify(bool value) async =>
-      _propertiesChangedController.add(value);
+  late final propertiesChanged = B.writable(false);
+  late final isDownload = B.family((String? url) {
+    return B.derived(() {
+      propertiesChanged.value;
+      getDownload(url) != null;
+    });
+  });
 
   ///
   /// Podcasts
@@ -101,7 +105,7 @@ class PodcastLibraryService {
     _podcastUpdates?.clear();
     await _sharedPreferences
         .setStringList(SPKeys.podcastFeedUrls, [])
-        .then(notify);
+        .then(propertiesChanged.set);
   }
 
   // Podcast Metadata
@@ -207,7 +211,7 @@ class PodcastLibraryService {
     final updatedFeeds = Set<String>.from(_feedsWithDownloads)..add(feedUrl);
     await _sharedPreferences
         .setStringList(SPKeys.podcastsWithDownloads, updatedFeeds.toList())
-        .then(notify);
+        .then(propertiesChanged.set);
   }
 
   bool feedHasDownloads(String feedUrl) =>
@@ -222,7 +226,7 @@ class PodcastLibraryService {
     if (getDownload(episodeID) != null && feedHasDownloads(feedUrl)) return;
     await _sharedPreferences
         .setString(episodeID + SPKeys.podcastEpisodeDownloadedSuffix, path)
-        .then(notify);
+        .then(propertiesChanged.set);
     await addFeedWithDownload(feedUrl);
   }
 
@@ -234,7 +238,7 @@ class PodcastLibraryService {
     _deleteDownload(episodeID);
     await _sharedPreferences
         .remove(episodeID + SPKeys.podcastEpisodeDownloadedSuffix)
-        .then(notify);
+        .then(propertiesChanged.set);
     // Check if there are any downloads left for this feed
     final hasMoreDownloads = _sharedPreferences.getKeys().any(
       (key) =>
@@ -266,7 +270,7 @@ class PodcastLibraryService {
       await _sharedPreferences.remove(key);
     }
     await _sharedPreferences.remove(SPKeys.podcastsWithDownloads);
-    _propertiesChangedController.add(true);
+    propertiesChanged.toggle();
   }
 
   Future<void> _removeFeedWithDownload(String feedUrl) async {
@@ -274,7 +278,7 @@ class PodcastLibraryService {
     final updatedFeeds = Set<String>.from(_feedsWithDownloads)..remove(feedUrl);
     await _sharedPreferences
         .setStringList(SPKeys.podcastsWithDownloads, updatedFeeds.toList())
-        .then(notify);
+        .then(propertiesChanged.set);
   }
 
   // Podcast Updates
@@ -311,7 +315,7 @@ class PodcastLibraryService {
             timestamp: lastUpdated.podcastTimeStamp,
           ),
         )
-        .then((_) => _propertiesChangedController.add(true));
+        .then((_) => propertiesChanged.toggle());
   }
 
   Future<void> removePodcastUpdate(String feedUrl) async {
@@ -320,7 +324,7 @@ class PodcastLibraryService {
     final updatedFeeds = Set<String>.from(_podcastUpdates!)..remove(feedUrl);
     await _sharedPreferences
         .setStringList(SPKeys.podcastsWithUpdates, updatedFeeds.toList())
-        .then((_) => _propertiesChangedController.add(true));
+        .then((_) => propertiesChanged.toggle());
   }
 
   // Podcast Episode Ordering
@@ -331,13 +335,13 @@ class PodcastLibraryService {
   Future<void> _addAscendingPodcast(String feedUrl) async {
     await _sharedPreferences
         .setBool(SPKeys.ascendingFeeds + feedUrl, true)
-        .then((_) => _propertiesChangedController.add(true));
+        .then((_) => propertiesChanged.toggle());
   }
 
   Future<void> _removeAscendingPodcast(String feedUrl) async =>
       _sharedPreferences
           .remove(SPKeys.ascendingFeeds + feedUrl)
-          .then((_) => _propertiesChangedController.add(true));
+          .then((_) => propertiesChanged.toggle());
 
   Future<void> reorderPodcast({
     required String feedUrl,

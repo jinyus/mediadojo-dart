@@ -43,7 +43,7 @@ class PlayerMainControls extends StatelessWidget {
   }
 }
 
-class PlayerShuffleButton extends StatelessWidget with WatchItMixin {
+class PlayerShuffleButton extends StatelessWidget {
   const PlayerShuffleButton({
     super.key,
     required this.iconColor,
@@ -65,7 +65,7 @@ class PlayerShuffleButton extends StatelessWidget with WatchItMixin {
   }
 }
 
-class PlayerPlaylistModeButton extends StatelessWidget with WatchItMixin {
+class PlayerPlaylistModeButton extends StatelessWidget {
   const PlayerPlaylistModeButton({
     super.key,
     required this.iconColor,
@@ -98,7 +98,7 @@ class PlayerPlaylistModeButton extends StatelessWidget with WatchItMixin {
   }
 }
 
-class PlayerIsPlayingButton extends StatelessWidget with WatchItMixin {
+class PlayerIsPlayingButton extends StatelessWidget {
   const PlayerIsPlayingButton({super.key, required this.iconColor});
 
   final Color iconColor;

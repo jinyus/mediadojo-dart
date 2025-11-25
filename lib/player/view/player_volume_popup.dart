@@ -5,7 +5,7 @@ import '../../register_dependencies.dart';
 import '../player_manager.dart';
 import 'player_track.dart';
 
-class PlayerVolumePopup extends StatelessWidget with WatchItMixin {
+class PlayerVolumePopup extends StatelessWidget {
   const PlayerVolumePopup({super.key, required this.iconColor});
 
   final Color iconColor;
@@ -35,7 +35,7 @@ class PlayerVolumePopup extends StatelessWidget with WatchItMixin {
   }
 }
 
-class PlayerVolumeSlider extends StatelessWidget with WatchItMixin {
+class PlayerVolumeSlider extends StatelessWidget {
   const PlayerVolumeSlider({super.key});
 
   @override

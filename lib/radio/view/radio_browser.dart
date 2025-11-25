@@ -10,7 +10,7 @@ import 'radio_browser_station_star_button.dart';
 import 'radio_host_not_connected_content.dart';
 import 'remote_media_list_tile_image.dart';
 
-class RadioBrowser extends StatelessWidget with WatchItMixin {
+class RadioBrowser extends StatelessWidget {
   const RadioBrowser({super.key});
 
   @override
@@ -35,7 +35,7 @@ class RadioBrowser extends StatelessWidget with WatchItMixin {
   }
 }
 
-class RadioBrowserTile extends StatelessWidget with WatchItMixin {
+class RadioBrowserTile extends StatelessWidget {
   const RadioBrowserTile({super.key, required this.media});
 
   final StationMedia media;

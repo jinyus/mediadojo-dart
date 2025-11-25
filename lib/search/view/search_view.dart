@@ -10,7 +10,7 @@ import '../../podcasts/view/podcast_search_view.dart';
 import '../../radio/view/radio_browser.dart';
 import 'search_field.dart';
 
-class SearchView extends StatelessWidget with WatchItMixin {
+class SearchView extends StatelessWidget {
   const SearchView({super.key});
 
   @override

@@ -7,7 +7,7 @@ import '../../register_dependencies.dart';
 import '../download_manager.dart';
 import '../podcast_library_service.dart';
 
-class DownloadButton extends StatelessWidget with WatchItMixin {
+class DownloadButton extends StatelessWidget {
   const DownloadButton({
     super.key,
     this.iconSize,
@@ -23,21 +23,11 @@ class DownloadButton extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final theme = context.theme;
     final manager = downloadManagerRef();
-    final value = watchPropertyValue(
-      (DownloadManager m) => m.getValue(audio?.url),
-    );
+    final value = manager.values(audio?.url).watch(context);
 
-    final download =
-        watchStream(
-          (PodcastLibraryService m) => m.propertiesChanged
-              .map((_) => m.getDownload(audio?.url) != null)
-              .distinct(),
-          target: podcastLibraryServiceRef(),
-          initialValue:
-              podcastLibraryServiceRef().getDownload(audio?.url) != null,
-          preserveState: false,
-        ).data ??
-        false;
+    final download = podcastLibraryServiceRef()
+        .isDownload(audio?.url)
+        .watch(context);
 
     final downloadsDir = settingsControllerRef().currentDir
         .watch(context)

@@ -15,7 +15,7 @@ import 'player_track.dart';
 import 'player_track_info.dart';
 import 'player_volume_popup.dart';
 
-class PlayerView extends StatelessWidget with WatchItMixin, PlayerControlMixin {
+class PlayerView extends StatelessWidget with PlayerControlMixin {
   const PlayerView({super.key});
 
   @override

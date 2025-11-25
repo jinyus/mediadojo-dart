@@ -26,7 +26,7 @@ class RadioBrowserStationStarButton extends StatelessWidget {
   }
 }
 
-class RadioStationStarButton extends StatelessWidget with WatchItMixin {
+class RadioStationStarButton extends StatelessWidget {
   const RadioStationStarButton({super.key});
 
   @override

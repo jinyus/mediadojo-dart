@@ -55,7 +55,7 @@ class PlayerAlbumArt extends StatelessWidget {
   }
 }
 
-class PlayerRemoteSourceImage extends StatelessWidget with WatchItMixin {
+class PlayerRemoteSourceImage extends StatelessWidget {
   const PlayerRemoteSourceImage({
     super.key,
     required this.height,

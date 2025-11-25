@@ -14,8 +14,7 @@ import 'player_explorer.dart';
 import 'player_track_info.dart';
 import 'player_view.dart';
 
-class PlayerFullView extends StatelessWidget
-    with WatchItMixin, PlayerControlMixin {
+class PlayerFullView extends StatelessWidget with PlayerControlMixin {
   const PlayerFullView({super.key});
 
   @override

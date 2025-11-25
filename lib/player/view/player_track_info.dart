@@ -10,7 +10,7 @@ import '../../register_dependencies.dart';
 import '../../search/copy_to_clipboard_content.dart';
 import '../data/station_media.dart';
 
-class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
+class PlayerTrackInfo extends StatelessWidget {
   const PlayerTrackInfo({
     super.key,
     required this.textColor,
@@ -93,7 +93,7 @@ class PlayerTrackInfo extends StatelessWidget with WatchItMixin {
   }
 }
 
-class PlayerTrackProgressTimeText extends StatelessWidget with WatchItMixin {
+class PlayerTrackProgressTimeText extends StatelessWidget {
   const PlayerTrackProgressTimeText({
     super.key,
     this.durationStyle,

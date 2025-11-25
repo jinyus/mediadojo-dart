@@ -11,7 +11,7 @@ import '../player/data/episode_media.dart';
 import '../settings/settings_service.dart';
 import 'podcast_library_service.dart';
 
-class DownloadManager extends ChangeNotifier with BeaconController {
+class DownloadManager with BeaconController {
   DownloadManager({
     required PodcastLibraryService libraryService,
     required SettingsService settingsService,
@@ -24,12 +24,15 @@ class DownloadManager extends ChangeNotifier with BeaconController {
   final SettingsService _settingsService;
   final Dio _dio;
 
-  final _values = <String, double?>{};
+  late final values = B.family(
+    (String? url) => B.derived(() => _values.value[url]),
+  );
+
+  late final _values = B.hashMap<String, double?>({});
   final _cancelTokens = <String, CancelToken?>{};
 
   late final messageBeacon = B.writable('');
 
-  double? getValue(String? url) => _values[url];
   void setValue({
     required int received,
     required int total,
@@ -37,11 +40,9 @@ class DownloadManager extends ChangeNotifier with BeaconController {
   }) {
     if (total <= 0) return;
     final v = received / total;
-    _values.containsKey(url)
+    _values.value.containsKey(url)
         ? _values.update(url, (value) => v)
         : _values.putIfAbsent(url, () => v);
-
-    notifyListeners();
   }
 
   Future<void> deleteDownload({required EpisodeMedia? media}) async {
@@ -52,11 +53,9 @@ class DownloadManager extends ChangeNotifier with BeaconController {
         episodeID: media!.url!,
         feedUrl: media.feedUrl,
       );
-      if (_values.containsKey(media.url)) {
+      if (_values.value.containsKey(media.url)) {
         _values.update(media.url!, (value) => null);
       }
-
-      notifyListeners();
     }
   }
 
@@ -64,8 +63,6 @@ class DownloadManager extends ChangeNotifier with BeaconController {
     if (_settingsService.downloadsDir != null) {
       await _libraryService.removeAllDownloads();
       _values.clear();
-
-      notifyListeners();
     }
   }
 
@@ -80,11 +77,11 @@ class DownloadManager extends ChangeNotifier with BeaconController {
 
     if (_cancelTokens[url] != null) {
       _cancelTokens[url]?.cancel();
-      _values.containsKey(url)
+      _values.value.containsKey(url)
           ? _values.update(url, (value) => null)
           : _values.putIfAbsent(url, () => null);
       _cancelTokens.update(url, (value) => null);
-      notifyListeners();
+
       return;
     }
 

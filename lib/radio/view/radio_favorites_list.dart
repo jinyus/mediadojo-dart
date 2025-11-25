@@ -45,7 +45,7 @@ class RadioFavoritesList extends StatelessWidget {
   }
 }
 
-class _RadioFavoriteListTile extends StatelessWidget with WatchItMixin {
+class _RadioFavoriteListTile extends StatelessWidget {
   const _RadioFavoriteListTile({super.key, required this.media});
 
   final StationMedia media;

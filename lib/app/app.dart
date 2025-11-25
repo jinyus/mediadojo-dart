@@ -6,7 +6,7 @@ import '../extensions/color_x.dart';
 import '../l10n/app_localizations.dart';
 import '../register_dependencies.dart';
 
-class App extends StatelessWidget with WatchItMixin {
+class App extends StatelessWidget {
   const App({
     super.key,
     required this.child,
@@ -53,7 +53,7 @@ class App extends StatelessWidget with WatchItMixin {
   }
 }
 
-class StaticApp extends StatelessWidget with WatchItMixin {
+class StaticApp extends StatelessWidget {
   const StaticApp({
     super.key,
     required this.child,

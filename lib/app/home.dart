@@ -12,7 +12,7 @@ import '../register_dependencies.dart';
 import '../search/view/search_view.dart';
 import '../settings/view/settings_dialog.dart';
 
-class Home extends StatelessWidget with WatchItMixin {
+class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
@@ -20,6 +20,7 @@ class Home extends StatelessWidget with WatchItMixin {
     final dlController = downloadManagerRef();
 
     dlController.messageBeacon.observe(context, (_, next) {
+      if (next.isEmpty) return;
       ScaffoldMessenger.maybeOf(
         context,
       )?.showSnackBar(SnackBar(content: Text(next)));

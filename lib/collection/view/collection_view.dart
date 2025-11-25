@@ -8,7 +8,7 @@ import '../../radio/view/radio_favorites_list.dart';
 import '../../register_dependencies.dart';
 import 'collection_search_field.dart';
 
-class CollectionView extends StatelessWidget with WatchItMixin {
+class CollectionView extends StatelessWidget {
   const CollectionView({super.key});
 
   @override

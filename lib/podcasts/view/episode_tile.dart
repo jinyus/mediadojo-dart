@@ -13,7 +13,7 @@ import '../../register_dependencies.dart';
 import '../data/podcast_metadata.dart';
 import 'download_button.dart';
 
-class EpisodeTile extends StatelessWidget with WatchItMixin {
+class EpisodeTile extends StatelessWidget {
   const EpisodeTile({
     super.key,
     required this.episode,
