@@ -290,9 +290,10 @@ class PlayerManager extends BaseAudioHandler
 
   Future<void> setVolume(double volume) async => player.setVolume(volume);
 
-  Stream<double> get volumeStream => player.stream.volume;
-
-  double get volume => player.state.volume;
+  late final volume = player.stream.volume.toRawBeacon(
+    shouldSleep: false,
+    initialValue: player.state.volume,
+  );
 
   @override
   Future<void> skipToNext() async => player.next();
