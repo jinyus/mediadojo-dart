@@ -3,7 +3,7 @@ import 'package:phoenix_theme/phoenix_theme.dart' hide ColorX;
 import 'package:system_theme/system_theme.dart';
 import 'package:system_theme/system_theme_builder.dart';
 
-import '../common/view/wait_for_registration_page.dart';
+import '../common/view/app_startup_page.dart';
 import '../extensions/build_context_x.dart';
 import '../extensions/color_x.dart';
 
@@ -28,7 +28,7 @@ class MediaDojo extends StatelessWidget {
     builder: (context, accent) {
       final theme = phoenixTheme(color: accent.accent);
 
-      return WaitForRegistrationPage(
+      return AppStartUpPage(
         lightTheme: theme.lightTheme.copyWith(
           navigationRailTheme: createNavigationRailTheme(
             context,
