@@ -21,7 +21,7 @@ class PodcastLibraryService with BeaconController {
   late final isDownload = B.family((String? url) {
     return B.derived(() {
       propertiesChanged.value;
-      getDownload(url) != null;
+      return getDownload(url) != null;
     });
   });
 

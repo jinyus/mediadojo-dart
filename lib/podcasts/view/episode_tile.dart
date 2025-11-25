@@ -27,6 +27,7 @@ class EpisodeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = playerManagerRef();
+    final podcastController = podcastControllerRef();
 
     final isPlaying = controller.isPlaying.watch(context);
 
@@ -78,7 +79,7 @@ class EpisodeTile extends StatelessWidget {
               ),
               DownloadButton(
                 audio: episode,
-                addPodcast: () => podcastControllerRef().addPodcast(
+                addPodcast: () => podcastController.addPodcast(
                   PodcastMetadata(
                     feedUrl: episode.feedUrl,
                     imageUrl: podcastImage,
